@@ -3,7 +3,10 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_menu_1"
-            android:title="MENU"
-            />
+            android:title="ZhiHu"/>
+
+        <item
+            android:id="@+id/navigation_menu_2"
+            android:title="News"/>
     </group>
 </menu>
