@@ -7,16 +7,25 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.lc.androidapp.R;
+import com.lc.androidapp.api.ZhiHuApi;
+import com.lc.androidapp.bean.ZhiHuDaily;
 import com.lc.androidapp.fragment.NewsFragment;
 import com.lc.androidapp.fragment.ZhiHuFragment;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     @InjectView(R.id.toolbar)
@@ -71,6 +80,27 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
         fTransaction.replace(R.id.main_frame, zhihuFragment);
         fTransaction.commit();
+
+        OkHttpClient client = new OkHttpClient();
+        Retrofit retrofit = new Retrofit.Builder()
+                .client(client)
+                .baseUrl("http://news-at.zhihu.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        ZhiHuApi zhihuApi = retrofit.create(ZhiHuApi.class);
+        Call<ZhiHuDaily> call = zhihuApi.userInfo();
+        call.enqueue(new Callback<ZhiHuDaily>() {
+            @Override
+            public void onResponse(Call<ZhiHuDaily> call, Response<ZhiHuDaily> response) {
+                ZhiHuDaily daily = response.body();
+                Log.e("ZhiHuDaily ", "date : "+daily.getDate()+"\nstories : "+daily.getStories()[0].getTitle()+"\ntop-stories : "+daily.getTop_Stories()[0].getTitle());
+            }
+
+            @Override
+            public void onFailure(Call<ZhiHuDaily> call, Throwable t) {
+                Log.e("retrofit onFailure ", t.toString());
+            }
+        });
     }
 
     @Override
