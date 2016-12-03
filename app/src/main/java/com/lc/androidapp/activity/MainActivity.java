@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ZhiHuDaily> call, Response<ZhiHuDaily> response) {
                 ZhiHuDaily daily = response.body();
-                Log.e("ZhiHuDaily ", "date : "+daily.getDate()+"\nstories : "+daily.getStories()[0].getTitle()+"\ntop-stories : "+daily.getTop_Stories()[0].getTitle());
+                Log.e("ZhiHuDaily ", "date : "+daily.getDate()+"\nstories : "+daily.getStories()[0].getTitle()+"\ntop-stories : "+daily.getTop_stories()[0].getTitle());
             }
 
             @Override
