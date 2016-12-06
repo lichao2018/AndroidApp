@@ -20,15 +20,15 @@ public class ZhiHuDaily {
         this.date = date;
     }
 
-    public Top_Stories[] getTop_Stories() {
-        return top_Stories;
+    public Stories[] getTop_stories() {
+        return top_stories;
     }
 
-    public void setTop_Stories(Top_Stories[] topStories) {
-        this.top_Stories = topStories;
+    public void setTop_stories(Stories[] topStories) {
+        this.top_stories = topStories;
     }
 
     private String date;
-    private Top_Stories[] top_Stories;
+    private Stories[] top_stories;
     private Stories[] stories;
 }

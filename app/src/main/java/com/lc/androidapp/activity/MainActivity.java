@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.lc.androidapp.R;
 import com.lc.androidapp.api.ZhiHuApi;
 import com.lc.androidapp.bean.ZhiHuDaily;
+import com.lc.androidapp.bean.ZhiHuStory;
 import com.lc.androidapp.fragment.NewsFragment;
 import com.lc.androidapp.fragment.ZhiHuFragment;
 
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     @InjectView(R.id.navigation)
     NavigationView navigation;
+
+    ZhiHuDaily mZhiHuDaily;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,13 +90,27 @@ public class MainActivity extends AppCompatActivity {
                 .baseUrl("http://news-at.zhihu.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        ZhiHuApi zhihuApi = retrofit.create(ZhiHuApi.class);
-        Call<ZhiHuDaily> call = zhihuApi.userInfo();
+        final ZhiHuApi zhihuApi = retrofit.create(ZhiHuApi.class);
+        Call<ZhiHuDaily> call = zhihuApi.getLastDaily();
         call.enqueue(new Callback<ZhiHuDaily>() {
             @Override
             public void onResponse(Call<ZhiHuDaily> call, Response<ZhiHuDaily> response) {
-                ZhiHuDaily daily = response.body();
-                Log.e("ZhiHuDaily ", "date : "+daily.getDate()+"\nstories : "+daily.getStories()[0].getTitle()+"\ntop-stories : "+daily.getTop_Stories()[0].getTitle());
+                mZhiHuDaily = response.body();
+                Log.e("ZhiHuDaily ", "date : "+mZhiHuDaily.getDate()+"\nstories : "+mZhiHuDaily.getStories()[0].getTitle()+"\ntop-stories : "+mZhiHuDaily.getTop_stories()[0].getTitle());
+
+                Call<ZhiHuStory> storyCall = zhihuApi.getZhiHuStory(mZhiHuDaily.getStories()[0].getId());
+                storyCall.enqueue(new Callback<ZhiHuStory>() {
+                    @Override
+                    public void onResponse(Call<ZhiHuStory> call, Response<ZhiHuStory> response) {
+                        ZhiHuStory story = response.body();
+                        Log.e("zhihuStory onResponse", story.getBody());
+                    }
+
+                    @Override
+                    public void onFailure(Call<ZhiHuStory> call, Throwable t) {
+                        Log.e("ZhihuStory onFailure", t.toString());
+                    }
+                });
             }
 
             @Override
