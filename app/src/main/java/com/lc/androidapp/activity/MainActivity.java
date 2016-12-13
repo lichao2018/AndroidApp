@@ -111,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("ZhihuStory onFailure", t.toString());
                     }
                 });
+                ZhiHuDaily daily = response.body();
+                Log.e("ZhiHuDaily ", "date : "+daily.getDate()+"\nstories : "+daily.getStories()[0].getTitle()+"\ntop-stories : "+daily.getTop_stories()[0].getTitle());
             }
 
             @Override
