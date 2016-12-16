@@ -1,8 +1,8 @@
 package com.lc.androidapp.activity;
 
-import android.app.FragmentTransaction;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 switch(item.getItemId()){
                     case R.id.navigation_menu_1:
                         ZhiHuFragment fZhiHu = new ZhiHuFragment();
@@ -80,46 +80,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ZhiHuFragment zhihuFragment = new ZhiHuFragment();
-        FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fTransaction = getSupportFragmentManager().beginTransaction();
         fTransaction.replace(R.id.main_frame, zhihuFragment);
         fTransaction.commit();
-
-        OkHttpClient client = new OkHttpClient();
-        Retrofit retrofit = new Retrofit.Builder()
-                .client(client)
-                .baseUrl("http://news-at.zhihu.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        final ZhiHuApi zhihuApi = retrofit.create(ZhiHuApi.class);
-        Call<ZhiHuDaily> call = zhihuApi.getLastDaily();
-        call.enqueue(new Callback<ZhiHuDaily>() {
-            @Override
-            public void onResponse(Call<ZhiHuDaily> call, Response<ZhiHuDaily> response) {
-                mZhiHuDaily = response.body();
-                Log.e("ZhiHuDaily ", "date : "+mZhiHuDaily.getDate()+"\nstories : "+mZhiHuDaily.getStories()[0].getTitle()+"\ntop-stories : "+mZhiHuDaily.getTop_stories()[0].getTitle());
-
-                Call<ZhiHuStory> storyCall = zhihuApi.getZhiHuStory(mZhiHuDaily.getStories()[0].getId());
-                storyCall.enqueue(new Callback<ZhiHuStory>() {
-                    @Override
-                    public void onResponse(Call<ZhiHuStory> call, Response<ZhiHuStory> response) {
-                        ZhiHuStory story = response.body();
-                        Log.e("zhihuStory onResponse", story.getBody());
-                    }
-
-                    @Override
-                    public void onFailure(Call<ZhiHuStory> call, Throwable t) {
-                        Log.e("ZhihuStory onFailure", t.toString());
-                    }
-                });
-                ZhiHuDaily daily = response.body();
-                Log.e("ZhiHuDaily ", "date : "+daily.getDate()+"\nstories : "+daily.getStories()[0].getTitle()+"\ntop-stories : "+daily.getTop_stories()[0].getTitle());
-            }
-
-            @Override
-            public void onFailure(Call<ZhiHuDaily> call, Throwable t) {
-                Log.e("retrofit onFailure ", t.toString());
-            }
-        });
     }
 
     @Override

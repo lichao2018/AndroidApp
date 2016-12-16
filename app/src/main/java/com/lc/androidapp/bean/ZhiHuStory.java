@@ -7,7 +7,12 @@ public class ZhiHuStory {
     String body;
     String image;
     String share_url;
-    String js;
+    String js[];
+    String ga_prefix;
+    String[] images;
+    int type;
+    int id;
+    String[] css;
 
     public String getBody() {
         return body;
@@ -33,11 +38,11 @@ public class ZhiHuStory {
         this.share_url = share_url;
     }
 
-    public String getJs() {
+    public String[] getJs() {
         return js;
     }
 
-    public void setJs(String js) {
+    public void setJs(String[] js) {
         this.js = js;
     }
 
@@ -80,10 +85,4 @@ public class ZhiHuStory {
     public void setCss(String[] css) {
         this.css = css;
     }
-
-    String ga_prefix;
-    String[] images;
-    int type;
-    int id;
-    String[] css;
 }
