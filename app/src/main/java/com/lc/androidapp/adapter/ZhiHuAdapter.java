@@ -21,8 +21,9 @@ public class ZhiHuAdapter extends RecyclerView.Adapter {
     private Context mContext;
     ZhiHuDaily mZhihuDaily;
 
-    public ZhiHuAdapter(Context context){
+    public ZhiHuAdapter(Context context, ZhiHuDaily zhihuDaily){
         mContext = context;
+        mZhihuDaily = zhihuDaily;
     }
 
     @Override
@@ -41,10 +42,6 @@ public class ZhiHuAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         return mZhihuDaily.getStories().length;
-    }
-
-    public void setZhihuDaily(ZhiHuDaily zhihuDaily){
-        mZhihuDaily = zhihuDaily;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{

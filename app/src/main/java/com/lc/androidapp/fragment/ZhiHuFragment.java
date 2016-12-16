@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import com.lc.androidapp.R;
 import com.lc.androidapp.adapter.ZhiHuAdapter;
 import com.lc.androidapp.bean.ZhiHuDaily;
+import com.lc.androidapp.presenter.ZhihuCallback;
 import com.lc.androidapp.presenter.ZhihuPresenter;
 
 import butterknife.ButterKnife;
@@ -39,13 +40,15 @@ public class ZhiHuFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ZhihuPresenter zhihuPresenter = new ZhihuPresenter();
-        ZhiHuDaily zhiHuDaily = zhihuPresenter.getZhihuDaily();
+        zhihuPresenter.getZhihuDaily(new ZhihuCallback<ZhiHuDaily>() {
+            @Override
+            public void onResult(ZhiHuDaily zhiHuDaily) {
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+                ZhiHuAdapter mAdapter = new ZhiHuAdapter(getContext(), zhiHuDaily);
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        ZhiHuAdapter mAdapter = new ZhiHuAdapter(getContext());
-        mAdapter.setZhihuDaily(zhiHuDaily);
-
-        recycleView.setLayoutManager(mLayoutManager);
-        recycleView.setAdapter(mAdapter);
+                recycleView.setLayoutManager(mLayoutManager);
+                recycleView.setAdapter(mAdapter);
+            }
+        });
     }
 }

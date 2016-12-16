@@ -17,9 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by lichao on 2016/12/16.
  */
 public class ZhihuPresenter {
-    private ZhiHuDaily mZhihuDaily;
-
-    public ZhiHuDaily getZhihuDaily(){
+    public void getZhihuDaily(final ZhihuCallback<ZhiHuDaily> callback){
         OkHttpClient client = new OkHttpClient();
         Retrofit retrofit = new Retrofit.Builder()
                 .client(client)
@@ -31,7 +29,7 @@ public class ZhihuPresenter {
         call.enqueue(new Callback<ZhiHuDaily>() {
             @Override
             public void onResponse(Call<ZhiHuDaily> call, Response<ZhiHuDaily> response) {
-                mZhihuDaily = response.body();
+                callback.onResult(response.body());
             }
 
             @Override
@@ -39,6 +37,5 @@ public class ZhihuPresenter {
                 Log.e("retrofit onFailure ", t.toString());
             }
         });
-        return mZhihuDaily;
     }
 }
