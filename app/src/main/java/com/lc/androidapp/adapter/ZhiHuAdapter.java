@@ -1,6 +1,7 @@
 package com.lc.androidapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lc.androidapp.R;
+import com.lc.androidapp.activity.DescriptionActivity;
 import com.lc.androidapp.bean.ZhiHuDaily;
 
 import java.util.ArrayList;
@@ -34,9 +36,19 @@ public class ZhiHuAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         MyViewHolder mHolder = (MyViewHolder)holder;
         mHolder.tv.setText(mZhihuDaily.getStories()[position].getTitle());
+        mHolder.tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, DescriptionActivity.class);
+                intent.putExtra("id", mZhihuDaily.getStories()[position].getId());
+                intent.putExtra("title", mZhihuDaily.getStories()[position].getTitle());
+                intent.putExtra("image", mZhihuDaily.getStories()[position].getImages()[0]);
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override

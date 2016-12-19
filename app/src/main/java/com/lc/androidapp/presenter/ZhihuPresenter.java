@@ -38,4 +38,27 @@ public class ZhihuPresenter {
             }
         });
     }
+
+    public void getZhihuStroty(int id, final ZhihuCallback<ZhiHuStory> callback){
+        OkHttpClient client = new OkHttpClient();
+        Retrofit retrofit = new Retrofit.Builder()
+                .client(client)
+                .baseUrl("http://news-at.zhihu.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        final ZhiHuApi zhiHuApi = retrofit.create(ZhiHuApi.class);
+        Call<ZhiHuStory> call = zhiHuApi.getZhiHuStory(id);
+        call.enqueue(new Callback<ZhiHuStory>(){
+
+            @Override
+            public void onResponse(Call<ZhiHuStory> call, Response<ZhiHuStory> response) {
+                callback.onResult(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<ZhiHuStory> call, Throwable t) {
+                Log.e("getzhihustory onfailure", t.toString());
+            }
+        });
+    }
 }
