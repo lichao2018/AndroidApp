@@ -18,22 +18,19 @@ import java.util.List;
 
 public class ListViewTestActivity extends Activity{
 
-    private Context mContext;
-    private ListView mListView;
     private List<TestData> mDatas;
-    private TestAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_listview);
-        mContext = this;
+        Context context = this;
 
         initData();
 
-        mListView = (ListView) findViewById(R.id.lv_test);
-        mAdapter = new TestAdapter(mContext, mDatas);
-        mListView.setAdapter(mAdapter);
+        ListView listView = (ListView) findViewById(R.id.lv_test);
+        TestAdapter adapter = new TestAdapter(context, mDatas);
+        listView.setAdapter(adapter);
     }
 
     private void initData() {
