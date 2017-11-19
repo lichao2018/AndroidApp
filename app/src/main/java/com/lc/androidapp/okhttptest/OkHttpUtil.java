@@ -1,4 +1,6 @@
-package com.lc.androidapp.utils;
+package com.lc.androidapp.okhttptest;
+
+import android.util.Log;
 
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
@@ -19,15 +21,15 @@ import okhttp3.Response;
 public class OkHttpUtil {
     private static final OkHttpClient mOkHttpClient = new OkHttpClient();
 
-    public static Response execute(Request request) throws IOException {
+    private static Response execute(Request request) throws IOException {
         return mOkHttpClient.newCall(request).execute();
     }
 
-    public static void enqueue(Request request, Callback responseCallback){
+    private static void enqueue(Request request, Callback responseCallback){
         mOkHttpClient.newCall(request).enqueue(responseCallback);
     }
 
-    public static void enqueue(Request request){
+    private static void enqueue(Request request){
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -50,8 +52,25 @@ public class OkHttpUtil {
         }
     }
 
+    public static void getStringFromServer(String url, final HttpCallback callback){
+        Request request = new Request.Builder().url(url).build();
+        enqueue(request, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onFailure(e);
+                Log.e("OkHttpUtil", "getStringFromServer onFailure : " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseUrl = response.body().string();
+                callback.onResult(responseUrl);
+            }
+        });
+    }
+
     private static final String CHARSET_NAME = "UTF-8";
-    public static String formatParams(List<BasicNameValuePair> params){
+    private static String formatParams(List<BasicNameValuePair> params){
         return URLEncodedUtils.format(params, CHARSET_NAME);
     }
 

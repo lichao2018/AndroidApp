@@ -1,4 +1,4 @@
-package com.lc.androidapp.bean;
+package com.lc.androidapp.okhttptest;
 
 /**
  * Created by lichao on 2017/11/15.

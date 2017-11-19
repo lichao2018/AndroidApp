@@ -1,15 +1,14 @@
-package com.lc.androidapp.activity;
+package com.lc.androidapp.okhttptest;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lc.androidapp.R;
-import com.lc.androidapp.adapter.TestAdapter;
-import com.lc.androidapp.bean.TestData;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,30 +17,13 @@ import java.util.List;
 
 public class ListViewTestActivity extends Activity{
 
-    private List<TestData> mDatas;
+    private List<ZhihuNews> mDatas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_listview);
         Context context = this;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         initData();
 
@@ -51,13 +33,16 @@ public class ListViewTestActivity extends Activity{
     }
 
     private void initData() {
-        mDatas = new ArrayList<>();
-        for (int i = 0; i < 10; i ++) {
-            TestData data = new TestData();
-            data.setTitle(""+i);
-            data.setBody("body");
-            data.setFoot("foot");
-            mDatas.add(data);
-        }
+        OkHttpUtil.getStringFromServer("http://news-at.zhihu.com/api/4/news/latest", new HttpCallback() {
+            @Override
+            public void onResult(String result) {
+                Gson gson = new Gson();
+                mDatas = gson.fromJson(result, new TypeToken<List<ZhihuNews>>(){}.getType());
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+            }
+        });
     }
 }

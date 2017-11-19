@@ -1,4 +1,4 @@
-package com.lc.androidapp.adapter;
+package com.lc.androidapp.okhttptest;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.lc.androidapp.R;
-import com.lc.androidapp.bean.TestData;
 
 import java.util.List;
 
@@ -18,10 +17,10 @@ import java.util.List;
 
 public class TestAdapter extends BaseAdapter{
 
-    private List<TestData> mDatas;
+    private List<ZhihuNews> mDatas;
     private Context mContext;
 
-    public TestAdapter(Context context, List<TestData> datas){
+    public TestAdapter(Context context, List<ZhihuNews> datas){
         mContext = context;
         mDatas = datas;
     }
@@ -54,9 +53,9 @@ public class TestAdapter extends BaseAdapter{
         }else{
             viewHodler = (ViewHodler) convertView.getTag();
         }
-        viewHodler.tvTitle.setText(mDatas.get(position).getTitle());
-        viewHodler.tvBody.setText(mDatas.get(position).getBody());
-        viewHodler.tvFoot.setText(mDatas.get(position).getFoot());
+//        viewHodler.tvTitle.setText(mDatas.get(position).getTitle());
+//        viewHodler.tvBody.setText(mDatas.get(position).getBody());
+//        viewHodler.tvFoot.setText(mDatas.get(position).getFoot());
         return convertView;
     }
 
