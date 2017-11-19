@@ -26,6 +26,23 @@ public class ListViewTestActivity extends Activity{
         setContentView(R.layout.activity_test_listview);
         Context context = this;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         initData();
 
         ListView listView = (ListView) findViewById(R.id.lv_test);
