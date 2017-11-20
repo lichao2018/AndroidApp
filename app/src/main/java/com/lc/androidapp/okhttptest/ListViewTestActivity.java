@@ -2,11 +2,13 @@ package com.lc.androidapp.okhttptest;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.lc.androidapp.R;
 
 import java.util.List;
@@ -17,19 +19,20 @@ import java.util.List;
 
 public class ListViewTestActivity extends Activity{
 
-    private List<ZhihuNews> mDatas;
+    private List<ZhihuStory> mStories;
+    private ZhihuNews mZhihuNews;
+    ListView mListView;
+    TestAdapter mAdapter;
+    Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_listview);
-        Context context = this;
+        mContext = this;
 
+        mListView = (ListView) findViewById(R.id.lv_test);
         initData();
-
-        ListView listView = (ListView) findViewById(R.id.lv_test);
-        TestAdapter adapter = new TestAdapter(context, mDatas);
-        listView.setAdapter(adapter);
     }
 
     private void initData() {
@@ -37,7 +40,23 @@ public class ListViewTestActivity extends Activity{
             @Override
             public void onResult(String result) {
                 Gson gson = new Gson();
-                mDatas = gson.fromJson(result, new TypeToken<List<ZhihuNews>>(){}.getType());
+                mZhihuNews = gson.fromJson(result, ZhihuNews.class);
+                mStories = mZhihuNews.getStories();
+                mListView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter = new TestAdapter(mContext, mStories);
+                        mListView.setAdapter(mAdapter);
+                        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Intent intent = new Intent(mContext, ZhihuStoryActivity.class);
+                                intent.putExtra("id", mStories.get(position).getId());
+                                mContext.startActivity(intent);
+                            }
+                        });
+                    }
+                });
             }
 
             @Override

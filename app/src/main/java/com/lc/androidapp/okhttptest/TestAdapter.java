@@ -17,10 +17,10 @@ import java.util.List;
 
 public class TestAdapter extends BaseAdapter{
 
-    private List<ZhihuNews> mDatas;
+    private List<ZhihuStory> mDatas;
     private Context mContext;
 
-    public TestAdapter(Context context, List<ZhihuNews> datas){
+    public TestAdapter(Context context, List<ZhihuStory> datas){
         mContext = context;
         mDatas = datas;
     }
@@ -53,7 +53,7 @@ public class TestAdapter extends BaseAdapter{
         }else{
             viewHodler = (ViewHodler) convertView.getTag();
         }
-//        viewHodler.tvTitle.setText(mDatas.get(position).getTitle());
+        viewHodler.tvTitle.setText(mDatas.get(position).getTitle());
 //        viewHodler.tvBody.setText(mDatas.get(position).getBody());
 //        viewHodler.tvFoot.setText(mDatas.get(position).getFoot());
         return convertView;
