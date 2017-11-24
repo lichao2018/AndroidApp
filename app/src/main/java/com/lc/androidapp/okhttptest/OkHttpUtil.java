@@ -19,6 +19,7 @@ import okhttp3.Response;
  */
 
 public class OkHttpUtil {
+
     private static final OkHttpClient mOkHttpClient = new OkHttpClient();
 
     private static Response execute(Request request) throws IOException {

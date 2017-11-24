@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -33,6 +34,7 @@ public class ListViewTestActivity extends Activity{
 
         mListView = (ListView) findViewById(R.id.lv_test);
         initData();
+        Log.e("","");
     }
 
     private void initData() {
