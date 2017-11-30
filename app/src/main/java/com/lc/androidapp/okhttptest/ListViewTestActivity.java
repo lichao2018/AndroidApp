@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.lc.androidapp.R;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -41,33 +42,39 @@ public class ListViewTestActivity extends Activity{
     }
 
     private void initData() {
-        OkHttpUtil.getStringFromServer("http://news-at.zhihu.com/api/4/news/latest", new HttpCallback() {
+        new Thread(new Runnable() {
             @Override
-            public void onResult(String result) {
-                Gson gson = new Gson();
-                mZhihuNews = gson.fromJson(result, ZhihuNews.class);
-                mStories = mZhihuNews.getStories();
-                mListView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter = new TestAdapter(mContext, mStories);
-                        mListView.setAdapter(mAdapter);
-                        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Intent intent = new Intent(mContext, ZhihuStoryActivity.class);
-                                intent.putExtra("id", mStories.get(position-1).getId());
-                                mContext.startActivity(intent);
-                            }
-                        });
+            public void run() {
+                try {
+                    String result = OkHttpUtil.getStringFromServer("http://news-at.zhihu.com/api/4/news/latest");
+                    Gson gson = new Gson();
+                    mZhihuNews = gson.fromJson(result, ZhihuNews.class);
+                    mStories = mZhihuNews.getStories();
+                    if(mStories.size()<19){
+                        result = OkHttpUtil.getStringFromServer("http://news-at.zhihu.com/api/4/news/before/" + mZhihuNews.getDate());
+                        mZhihuNews = gson.fromJson(result, ZhihuNews.class);
+                        mStories.addAll(mZhihuNews.getStories());
                     }
-                });
+                    mListView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter = new TestAdapter(mContext, mStories);
+                            mListView.setAdapter(mAdapter);
+                            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    Intent intent = new Intent(mContext, ZhihuStoryActivity.class);
+                                    intent.putExtra("id", mStories.get(position-1).getId());
+                                    mContext.startActivity(intent);
+                                }
+                            });
+                        }
+                    });
+                } catch (IOException e) {
+                    tvEmpty.setText("网络加载失败");
+                    e.printStackTrace();
+                }
             }
-
-            @Override
-            public void onFailure(Exception e) {
-                tvEmpty.setText("网络加载失败");
-            }
-        });
+        }).start();
     }
 }
