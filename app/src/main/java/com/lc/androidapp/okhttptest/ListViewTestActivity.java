@@ -6,13 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.lc.androidapp.R;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +23,7 @@ public class ListViewTestActivity extends Activity{
 
     private List<ZhihuStory> mStories;
     private ZhihuNews mZhihuNews;
-    ListView mListView;
+    MyListView mListView;
     TestAdapter mAdapter;
     Context mContext;
     TextView tvEmpty;
@@ -34,10 +34,56 @@ public class ListViewTestActivity extends Activity{
         setContentView(R.layout.activity_test_listview);
         mContext = this;
 
-        mListView = (ListView) findViewById(R.id.lv_test);
+        mListView = (MyListView) findViewById(R.id.lv_test);
+        mStories = new ArrayList<>();
+        mAdapter = new TestAdapter(mContext, mStories);
+        mListView.setAdapter(mAdapter);
         tvEmpty = (TextView)findViewById(R.id.tv_empty);
         tvEmpty.setText("正在加载数据...");
         mListView.setEmptyView(tvEmpty);
+        mListView.setRefreshListener(new MyListView.RefreshListener() {
+            @Override
+            public void onPullRefresh() {
+                OkHttpUtil.getStringFromServer("http://news-at.zhihu.com/api/4/news/latest", new HttpCallback() {
+                    @Override
+                    public void onResult(String result) {
+                        Gson gson = new Gson();
+                        ZhihuNews zhihuNews = gson.fromJson(result, ZhihuNews.class);
+                        List<ZhihuStory> zhihuStories = zhihuNews.getStories();
+                        for(int i = zhihuStories.size()-1; i >= 0; i --){
+                            boolean exist = false;
+                            ZhihuStory newZhihuStory = zhihuStories.get(i);
+                            for(int j = mStories.size()-1; j >= 0; j --){
+                                ZhihuStory zhihuStory = mStories.get(j);
+                                if(newZhihuStory.getId() == zhihuStory.getId()){
+                                    exist = true;
+                                    break;
+                                }
+                            }
+                            if(!exist){
+                                mStories.add(0, newZhihuStory);
+                            }
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mAdapter.notifyDataSetChanged();
+                                mListView.completeRefresh();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onLoadMore() {
+            }
+        });
         initData();
     }
 
@@ -46,10 +92,10 @@ public class ListViewTestActivity extends Activity{
             @Override
             public void run() {
                 try {
-                    String result = OkHttpUtil.getStringFromServer("http://news-at.zhihu.com/api/4/news/latest");
+                    String result = OkHttpUtil.getStringFromServer("http://news-at.zhihu.com/api/4/news/before/20171130");
                     Gson gson = new Gson();
                     mZhihuNews = gson.fromJson(result, ZhihuNews.class);
-                    mStories = mZhihuNews.getStories();
+                    mStories.addAll(mZhihuNews.getStories());
                     if(mStories.size()<19){
                         result = OkHttpUtil.getStringFromServer("http://news-at.zhihu.com/api/4/news/before/" + mZhihuNews.getDate());
                         mZhihuNews = gson.fromJson(result, ZhihuNews.class);
@@ -58,8 +104,6 @@ public class ListViewTestActivity extends Activity{
                     mListView.post(new Runnable() {
                         @Override
                         public void run() {
-                            mAdapter = new TestAdapter(mContext, mStories);
-                            mListView.setAdapter(mAdapter);
                             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -71,8 +115,20 @@ public class ListViewTestActivity extends Activity{
                         }
                     });
                 } catch (IOException e) {
-                    tvEmpty.setText("网络加载失败");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            tvEmpty.setText("网络加载失败");
+                        }
+                    });
                     e.printStackTrace();
+                }finally {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    });
                 }
             }
         }).start();

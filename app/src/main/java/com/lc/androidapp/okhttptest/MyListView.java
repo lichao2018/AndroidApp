@@ -18,10 +18,21 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
     private View headerView;
     private int headerHight;
     private View footerView;
+    RefreshListener mRefreshListener;
+    boolean isReFreshing = false;
 
     public MyListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initView();
+    }
+
+    public void setRefreshListener(RefreshListener listener){
+        mRefreshListener = listener;
+    }
+
+    public void completeRefresh(){
+        headerView.setPadding(0, -headerHight, 0, 0);
+        isReFreshing = false;
     }
 
     private void initView() {
@@ -52,6 +63,9 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
                 downY = (int)(ev.getY());
                 break;
             case MotionEvent.ACTION_MOVE:
+                if(isReFreshing){
+                    break;
+                }
                 int moveY = (int)(ev.getY());
                 int padding = moveY - downY;
                 if(padding >= headerHight){
@@ -60,7 +74,9 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
                 headerView.setPadding(0, -(headerHight - padding), 0, 0);
                 break;
             case MotionEvent.ACTION_UP:
-                headerView.setPadding(0, -headerHight, 0, 0);
+                if(mRefreshListener != null && getFirstVisiblePosition() == 0) {
+                    mRefreshListener.onPullRefresh();
+                }
                 break;
             default:
                 break;
@@ -84,5 +100,10 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
+    }
+
+    public interface RefreshListener {
+        void onPullRefresh();
+        void onLoadMore();
     }
 }
