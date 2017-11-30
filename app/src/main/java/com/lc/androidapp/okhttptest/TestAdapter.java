@@ -54,8 +54,6 @@ public class TestAdapter extends BaseAdapter{
             viewHodler = (ViewHodler) convertView.getTag();
         }
         viewHodler.tvTitle.setText(mDatas.get(position).getTitle());
-//        viewHodler.tvBody.setText(mDatas.get(position).getBody());
-//        viewHodler.tvFoot.setText(mDatas.get(position).getFoot());
         return convertView;
     }
 

@@ -56,7 +56,7 @@ public class ListViewTestActivity extends Activity{
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 Intent intent = new Intent(mContext, ZhihuStoryActivity.class);
-                                intent.putExtra("id", mStories.get(position).getId());
+                                intent.putExtra("id", mStories.get(position-1).getId());
                                 mContext.startActivity(intent);
                             }
                         });
