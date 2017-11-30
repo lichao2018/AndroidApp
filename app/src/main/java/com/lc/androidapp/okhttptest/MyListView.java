@@ -70,11 +70,14 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if(scrollState == SCROLL_STATE_TOUCH_SCROLL && getLastVisiblePosition() == (getCount()-1)){
-            footerView.setPadding(0, 0, 0, 0);
-        }
         if(scrollState == SCROLL_STATE_IDLE && getLastVisiblePosition() == (getCount()-1)){
-            footerView.setPadding(0, -footerView.getMeasuredHeight(), 0, 0);
+            footerView.setPadding(0, 0, 0, 0);
+            headerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    footerView.setPadding(0, -footerView.getMeasuredHeight(), 0, 0);
+                }
+            }, 200);
         }
     }
 
