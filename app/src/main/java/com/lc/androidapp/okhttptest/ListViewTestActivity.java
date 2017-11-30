@@ -92,7 +92,7 @@ public class ListViewTestActivity extends Activity{
             @Override
             public void run() {
                 try {
-                    String result = OkHttpUtil.getStringFromServer("http://news-at.zhihu.com/api/4/news/before/20171130");
+                    String result = OkHttpUtil.getStringFromServer("http://news-at.zhihu.com/api/4/news/latest");
                     Gson gson = new Gson();
                     mZhihuNews = gson.fromJson(result, ZhihuNews.class);
                     mStories.addAll(mZhihuNews.getStories());

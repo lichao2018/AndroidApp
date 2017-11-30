@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.lc.androidapp.R;
 
@@ -16,13 +17,16 @@ import com.lc.androidapp.R;
 public class MyListView extends ListView implements AbsListView.OnScrollListener{
     private int downY;
     private View headerView;
+    private TextView mTvHeader;
     private int headerHight;
     private View footerView;
     RefreshListener mRefreshListener;
     boolean isReFreshing = false;
+    private Context mContext;
 
     public MyListView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mContext = context;
         initView();
     }
 
@@ -43,6 +47,7 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
 
     private void initHeaderView() {
         headerView = View.inflate(getContext(), R.layout.layout_header, null);
+        mTvHeader = (TextView) headerView.findViewById(R.id.tv_header);
         headerView.measure(0,0);
         headerHight = headerView.getMeasuredHeight();
         headerView.setPadding(0,-headerHight, 0,0);
@@ -66,16 +71,24 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
                 if(isReFreshing){
                     break;
                 }
-                int moveY = (int)(ev.getY());
-                int padding = moveY - downY;
-                if(padding >= headerHight){
-                    padding = headerHight;
+                int deltaY = (int)(ev.getY() - downY);
+                int padding = -headerHight + deltaY;
+                if(padding > -headerHight && getFirstVisiblePosition() == 0) {
+                    if(padding >= headerHight){
+                        padding = headerHight;
+                    }
+                    headerView.setPadding(0, padding, 0, 0);
+                    if(padding < 0){
+                        mTvHeader.setText("下拉刷新");
+                    }else if(padding > 0){
+                        mTvHeader.setText("松开刷新");
+                    }
                 }
-                headerView.setPadding(0, -(headerHight - padding), 0, 0);
                 break;
             case MotionEvent.ACTION_UP:
                 if(mRefreshListener != null && getFirstVisiblePosition() == 0) {
                     mRefreshListener.onPullRefresh();
+                    mTvHeader.setText("正在刷新");
                 }
                 break;
             default:
