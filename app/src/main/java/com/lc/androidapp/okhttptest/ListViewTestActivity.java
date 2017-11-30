@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.lc.androidapp.R;
@@ -25,6 +25,7 @@ public class ListViewTestActivity extends Activity{
     ListView mListView;
     TestAdapter mAdapter;
     Context mContext;
+    TextView tvEmpty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +34,10 @@ public class ListViewTestActivity extends Activity{
         mContext = this;
 
         mListView = (ListView) findViewById(R.id.lv_test);
+        tvEmpty = (TextView)findViewById(R.id.tv_empty);
+        tvEmpty.setText("正在加载数据...");
+        mListView.setEmptyView(tvEmpty);
         initData();
-        Log.e("","");
     }
 
     private void initData() {
@@ -63,6 +66,7 @@ public class ListViewTestActivity extends Activity{
 
             @Override
             public void onFailure(Exception e) {
+                tvEmpty.setText("网络加载失败");
             }
         });
     }
