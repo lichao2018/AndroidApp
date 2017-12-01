@@ -23,6 +23,7 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
     RefreshListener mRefreshListener;
     boolean isReFreshing = false;
     private Context mContext;
+    private boolean isLoadingMore = false;
 
     public MyListView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -35,8 +36,13 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
     }
 
     public void completeRefresh(){
-        headerView.setPadding(0, -headerHight, 0, 0);
-        isReFreshing = false;
+        if(isLoadingMore){
+            footerView.setPadding(0, -footerView.getMeasuredHeight(), 0, 0);
+            isLoadingMore = false;
+        }else {
+            headerView.setPadding(0, -headerHight, 0, 0);
+            isReFreshing = false;
+        }
     }
 
     private void initView() {
@@ -99,14 +105,11 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if(scrollState == SCROLL_STATE_IDLE && getLastVisiblePosition() == (getCount()-1)){
+        if(scrollState == SCROLL_STATE_IDLE && getLastVisiblePosition() == (getCount()-1) && !isLoadingMore){
             footerView.setPadding(0, 0, 0, 0);
-            headerView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    footerView.setPadding(0, -footerView.getMeasuredHeight(), 0, 0);
-                }
-            }, 200);
+            setSelection(getCount());
+            mRefreshListener.onLoadMore();
+            isLoadingMore = true;
         }
     }
 

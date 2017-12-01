@@ -82,6 +82,26 @@ public class ListViewTestActivity extends Activity{
 
             @Override
             public void onLoadMore() {
+                OkHttpUtil.getStringFromServer("http://news-at.zhihu.com/api/4/news/before/" + mZhihuNews.getDate(), new HttpCallback() {
+                    @Override
+                    public void onResult(String result) {
+                        Gson gson = new Gson();
+                        mZhihuNews = gson.fromJson(result, ZhihuNews.class);
+                        mStories.addAll(mZhihuNews.getStories());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mAdapter.notifyDataSetChanged();
+                                mListView.completeRefresh();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
             }
         });
         initData();
