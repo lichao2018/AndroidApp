@@ -55,6 +55,7 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
             mArrow.setVisibility(View.VISIBLE);
             mPbHeader.setVisibility(View.GONE);
             currentState = PULL_REFRESH;
+            mTvHeader.setText("下拉刷新");
         }
     }
 
