@@ -48,8 +48,6 @@ public class ZhihuAdapter extends BaseAdapter{
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_item, parent, false);
             viewHodler = new ViewHodler();
             viewHodler.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
-            viewHodler.tvBody = (TextView) convertView.findViewById(R.id.tv_body);
-            viewHodler.tvFoot = (TextView) convertView.findViewById(R.id.tv_foot);
             convertView.setTag(viewHodler);
         }else{
             viewHodler = (ViewHodler) convertView.getTag();

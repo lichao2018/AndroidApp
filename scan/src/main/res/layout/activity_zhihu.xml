@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <com.lc.androidapp.okhttptest.MyListView
+    <com.lc.scan.ui.view.MyListView
         android:id="@+id/lv_test"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
