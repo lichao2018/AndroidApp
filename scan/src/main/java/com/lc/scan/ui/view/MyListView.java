@@ -5,7 +5,9 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.lc.scan.R;
@@ -24,6 +26,8 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
     boolean isReFreshing = false;
     private Context mContext;
     private boolean isLoadingMore = false;
+    private ImageView mArrow;
+    private ProgressBar pbHeader;
 
     public MyListView(Context context, AttributeSet attrs) {
         super(context, attrs);
