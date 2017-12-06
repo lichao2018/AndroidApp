@@ -40,12 +40,18 @@ public class ZhihuActivity extends Activity{
         setContentView(R.layout.activity_zhihu);
         mContext = this;
 
-        mListView = (MyListView) findViewById(R.id.lv_test);
+        initView();
+        initData();
+    }
+
+    private void initView(){
         mStories = new ArrayList<>();
         mAdapter = new ZhihuAdapter(mContext, mStories);
-        mListView.setAdapter(mAdapter);
-        tvEmpty = (TextView)findViewById(R.id.tv_empty);
+        tvEmpty = findViewById(R.id.tv_empty);
         tvEmpty.setText("正在加载数据...");
+        mListView = findViewById(R.id.lv_test);
+        mListView.setAdapter(mAdapter);
+        mListView.setVerticalScrollBarEnabled(false);
         mListView.setEmptyView(tvEmpty);
         mListView.setRefreshListener(new MyListView.RefreshListener() {
             @Override
@@ -110,7 +116,6 @@ public class ZhihuActivity extends Activity{
                 });
             }
         });
-        initData();
     }
 
     private void initData() {

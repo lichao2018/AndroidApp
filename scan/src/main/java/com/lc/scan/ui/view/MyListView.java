@@ -46,19 +46,6 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
         mRefreshListener = listener;
     }
 
-    public void completeRefresh(){
-        if(isLoadingMore){
-            footerView.setPadding(0, -footerView.getMeasuredHeight(), 0, 0);
-            isLoadingMore = false;
-        }else {
-            headerView.setPadding(0, -headerHight, 0, 0);
-            mArrow.setVisibility(View.VISIBLE);
-            mPbHeader.setVisibility(View.GONE);
-            currentState = PULL_REFRESH;
-            mTvHeader.setText("下拉刷新");
-        }
-    }
-
     private void initView() {
         setOnScrollListener(this);
         initHeaderView();
@@ -68,9 +55,9 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
 
     private void initHeaderView() {
         headerView = View.inflate(getContext(), R.layout.layout_header, null);
-        mTvHeader = (TextView) headerView.findViewById(R.id.tv_header);
-        mArrow = (ImageView)headerView.findViewById(R.id.iv_arraw);
-        mPbHeader = (ProgressBar)headerView.findViewById(R.id.pb_header);
+        mTvHeader = headerView.findViewById(R.id.tv_header);
+        mArrow = headerView.findViewById(R.id.iv_arraw);
+        mPbHeader = headerView.findViewById(R.id.pb_header);
         headerView.measure(0,0);
         headerHight = headerView.getMeasuredHeight();
         headerView.setPadding(0,-headerHight, 0,0);
@@ -98,6 +85,19 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
         mDownAnimation.setFillAfter(true);
     }
 
+    public void completeRefresh(){
+        if(isLoadingMore){
+            footerView.setPadding(0, -footerView.getMeasuredHeight(), 0, 0);
+            isLoadingMore = false;
+        }else {
+            headerView.setPadding(0, -headerHight, 0, 0);
+            mArrow.setVisibility(View.VISIBLE);
+            mPbHeader.setVisibility(View.GONE);
+            currentState = PULL_REFRESH;
+            mTvHeader.setText("下拉刷新");
+        }
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         switch (ev.getAction()){
@@ -117,11 +117,11 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
                         padding = headerHight;
                     }
                     headerView.setPadding(0, padding, 0, 0);
-                    if(padding < 0 && currentState == RELEASE_REFRESH){
+                    if(padding < headerHight/2 && currentState == RELEASE_REFRESH){
                         mTvHeader.setText("下拉刷新");
                         mArrow.startAnimation(mDownAnimation);
                         currentState = PULL_REFRESH;
-                    }else if(padding > 0 && currentState == PULL_REFRESH){
+                    }else if(padding > headerHight/2 && currentState == PULL_REFRESH){
                         mTvHeader.setText("松开刷新");
                         mArrow.startAnimation(mUpAnimation);
                         currentState = RELEASE_REFRESH;
@@ -130,12 +130,16 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
                 break;
             case MotionEvent.ACTION_UP:
                 if(mRefreshListener != null && getFirstVisiblePosition() == 0) {
-                    currentState = REFRESHING;
-                    mRefreshListener.onPullRefresh();
-                    mTvHeader.setText("正在刷新");
-                    mPbHeader.setVisibility(View.VISIBLE);
-                    mArrow.clearAnimation();
-                    mArrow.setVisibility(View.GONE);
+                    if(currentState == RELEASE_REFRESH){
+                        currentState = REFRESHING;
+                        mRefreshListener.onPullRefresh();
+                        mTvHeader.setText("正在刷新");
+                        mPbHeader.setVisibility(View.VISIBLE);
+                        mArrow.clearAnimation();
+                        mArrow.setVisibility(View.GONE);
+                    }else if(currentState == PULL_REFRESH){
+                        completeRefresh();
+                    }
                 }
                 break;
             default:
