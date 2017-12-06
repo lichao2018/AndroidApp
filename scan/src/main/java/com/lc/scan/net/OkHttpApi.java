@@ -11,6 +11,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by lichao on 2017/11/19.
@@ -19,6 +20,11 @@ import java.util.List;
 public class OkHttpApi {
 
     private static final OkHttpClient mOkHttpClient = new OkHttpClient();
+
+    static{
+        mOkHttpClient.setConnectTimeout(5, TimeUnit.SECONDS);
+        mOkHttpClient.setReadTimeout(5, TimeUnit.SECONDS);
+    }
 
     private static Response execute(Request request) throws IOException {
         return mOkHttpClient.newCall(request).execute();

@@ -3,10 +3,13 @@ package com.lc.scan.ui.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lc.scan.R;
@@ -87,7 +90,13 @@ public class ZhihuActivity extends Activity{
 
                     @Override
                     public void onFailure(Exception e) {
-
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mListView.completeRefresh();
+                                Toast.makeText(mContext, "网络加载失败", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 });
             }
@@ -111,7 +120,13 @@ public class ZhihuActivity extends Activity{
 
                     @Override
                     public void onFailure(Exception e) {
-
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mListView.completeRefresh();
+                                Toast.makeText(mContext, "网络加载失败", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 });
             }
@@ -149,7 +164,24 @@ public class ZhihuActivity extends Activity{
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            tvEmpty.setText("网络加载失败");
+                            tvEmpty.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+                            tvEmpty.setTextColor(Color.BLUE);
+                            tvEmpty.setText("网络加载失败，点击重试");
+                            tvEmpty.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    tvEmpty.getPaint().setFlags(Paint.LINEAR_TEXT_FLAG);
+                                    tvEmpty.setTextColor(Color.BLACK);
+                                    tvEmpty.setText("正在加载数据...");
+                                    mListView.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            initData();
+                                        }
+                                    }, 1500);
+
+                                }
+                            });
                         }
                     });
                     e.printStackTrace();
