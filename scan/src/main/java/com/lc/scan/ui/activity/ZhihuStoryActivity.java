@@ -1,6 +1,5 @@
 package com.lc.scan.ui.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.webkit.WebView;
@@ -15,7 +14,7 @@ import com.lc.scan.net.OkHttpApi;
  * Created by lichao on 2017/11/20.
  */
 
-public class ZhihuStoryActivity extends Activity{
+public class ZhihuStoryActivity extends BaseActivity{
     private WebView mWebView;
 
     @Override
