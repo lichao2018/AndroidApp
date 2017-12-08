@@ -1,6 +1,5 @@
 package com.lc.scan.ui.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -28,7 +27,7 @@ import java.util.List;
  * Created by lichao on 2017/11/15.
  */
 
-public class ZhihuActivity extends Activity{
+public class ZhihuActivity extends BaseActivity{
 
     private List<ZhihuStory> mStories;
     private ZhihuNews mZhihuNews;
@@ -43,6 +42,7 @@ public class ZhihuActivity extends Activity{
         setContentView(R.layout.activity_zhihu);
         mContext = this;
 
+        setSwipeBackEnable(false);
         initView();
         initData();
     }
@@ -50,9 +50,9 @@ public class ZhihuActivity extends Activity{
     private void initView(){
         mStories = new ArrayList<>();
         mAdapter = new ZhihuAdapter(mContext, mStories);
-        tvEmpty = findViewById(R.id.tv_empty);
+        tvEmpty = (TextView) findViewById(R.id.tv_empty);
         tvEmpty.setText("正在加载数据...");
-        mListView = findViewById(R.id.lv_test);
+        mListView = (MyListView) findViewById(R.id.lv_test);
         mListView.setAdapter(mAdapter);
         mListView.setVerticalScrollBarEnabled(false);
         mListView.setEmptyView(tvEmpty);
