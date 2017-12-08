@@ -22,7 +22,7 @@ public class BaseActivity extends Activity{
     }
 
     public void initGestureDetector(){
-        mGestureDetector = new GestureDetector(getApplicationContext(), new GestureDetector.OnGestureListener() {
+        mGestureDetector = new GestureDetector(this, new GestureDetector.OnGestureListener() {
             @Override
             public boolean onDown(MotionEvent e) {
                 return false;
@@ -40,6 +40,9 @@ public class BaseActivity extends Activity{
 
             @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                if((e2.getX()-e1.getX())>100 && Math.abs(e2.getY()-e1.getY())<60){
+                    onBackPressed();
+                }
                 return false;
             }
 
@@ -56,7 +59,7 @@ public class BaseActivity extends Activity{
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        return mGestureDetector.onTouchEvent(event) || super.onTouchEvent(event);
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        return mGestureDetector.onTouchEvent(event) || super.dispatchTouchEvent(event);
     }
 }
