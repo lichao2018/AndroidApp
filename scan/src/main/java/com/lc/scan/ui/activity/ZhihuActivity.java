@@ -2,6 +2,9 @@ package com.lc.scan.ui.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.view.MenuItem;
 
 import com.lc.scan.R;
 
@@ -12,6 +15,7 @@ import com.lc.scan.R;
 public class ZhihuActivity extends BaseActivity{
 
     Context mContext;
+    NavigationView mNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,5 +24,16 @@ public class ZhihuActivity extends BaseActivity{
         mContext = this;
 
         setSwipeBackEnable(false);
+        initView();
+    }
+
+    public void initView(){
+        mNavigationView = (NavigationView) findViewById(R.id.navigation);
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                return true;
+            }
+        });
     }
 }

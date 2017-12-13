@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/menu_group_news">
+        <item
+            android:id="@+id/menu_item_zhihu"
+            android:icon="@mipmap/ic_launcher"
+            android:title="知乎日报"/>
+
+        <item
+            android:id="@+id/menu_item_renmin"
+            android:icon="@mipmap/ic_launcher"
+            android:title="人民日报"/>
+    </group>
+
+    <group android:id="@+id/menu_group_cartoon">
+        <item
+            android:id="@+id/menu_item_onepiece"
+            android:icon="@mipmap/ic_launcher"
+            android:title="海贼王"/>
+
+        <item
+            android:id="@+id/menu_item_naruto"
+            android:icon="@mipmap/ic_launcher"
+            android:title="火影忍者"/>
+    </group>
+</menu>

@@ -33,4 +33,5 @@ dependencies {
     implementation 'com.squareup.okhttp:okhttp:2.0.0'
     implementation 'com.google.code.gson:gson:2.8.0'
     compile 'me.imid.swipebacklayout.lib:library:1.0.0'
+    implementation 'com.android.support:design:27.0.2'
 }
