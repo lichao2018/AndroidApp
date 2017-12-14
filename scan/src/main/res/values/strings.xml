@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Scan</string>
+    <string name="zhihu">知乎日报</string>
+    <string name="renmin">人民日报</string>
+    <string name="onepiece">海贼王</string>
+    <string name="naruto">火影忍者</string>
 </resources>
