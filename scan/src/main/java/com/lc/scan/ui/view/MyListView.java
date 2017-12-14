@@ -54,7 +54,7 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
     }
 
     private void initHeaderView() {
-        headerView = View.inflate(getContext(), R.layout.layout_header, null);
+        headerView = View.inflate(getContext(), R.layout.fragment_header, null);
         mTvHeader = headerView.findViewById(R.id.tv_header);
         mArrow = headerView.findViewById(R.id.iv_arraw);
         mPbHeader = headerView.findViewById(R.id.pb_header);
