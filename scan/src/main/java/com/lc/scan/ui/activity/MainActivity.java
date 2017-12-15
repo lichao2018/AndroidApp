@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 switch (item.getItemId()){
                     case R.id.menu_item_zhihu:
                         if(mZhihuFragment == null){
-                            mZhihuFragment = new ZhihuFragment();
+                            mZhihuFragment = (ZhihuFragment) getFragmentManager().findFragmentById(R.id.fragment);
                         }
                         switchContainer(mZhihuFragment);
                         break;
@@ -71,31 +71,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                         break;
                 }
                 tvHeader.setText(item.getTitle());
+                mNavigationView.getMenu().clear();
+                mNavigationView.inflateMenu(R.menu.navigation_menu);
+                mNavigationView.getMenu().findItem(item.getItemId()).setChecked(true);
                 mDrawerLayout.closeDrawer(Gravity.LEFT);
-                item.setChecked(true);
                 return true;
             }
         });
     }
 
-    public void switchContainer(Fragment fragment){
+    public void switchContainer(Fragment targetFragment){
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        hideFragment(fragmentTransaction);
-        if(!fragment.isAdded()){
-            fragmentTransaction.add(R.id.frame_container, fragment);
-        }else {
-            fragmentTransaction.show(fragment);
+        if(currentFragment != null){
+            fragmentTransaction.hide(currentFragment);
         }
-        fragmentTransaction.commit();
-    }
-
-    public void hideFragment(FragmentTransaction fragmentTransaction){
-        if(mZhihuFragment != null) {
-            fragmentTransaction.hide(mZhihuFragment);
+        if(!targetFragment.isAdded()){
+            fragmentTransaction.add(R.id.frame_container, targetFragment).commit();
+        }else{
+            fragmentTransaction.show(targetFragment).commit();
         }
-        if(mMeituFragment != null) {
-            fragmentTransaction.hide(mMeituFragment);
-        }
+        currentFragment = targetFragment;
     }
 
     @Override
