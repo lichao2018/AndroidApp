@@ -44,6 +44,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     }
 
     public void initView(){
+        mZhihuFragment = (ZhihuFragment) getFragmentManager().findFragmentById(R.id.fragment);
+        currentFragment = mZhihuFragment;
         tvHeader = (TextView) findViewById(R.id.header_title);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.layout_drawer);
         ivDrawer = (ImageView) findViewById(R.id.iv_drawer);
