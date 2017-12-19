@@ -1,22 +1,29 @@
 package com.lc.scan.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.lc.scan.R;
+import com.lc.scan.bean.Gank;
+
+import java.util.List;
 
 /**
  * Created by lichao on 2017/12/19.
  */
 
 public class MeituAdapter extends RecyclerView.Adapter<MeituAdapter.ViewHolder>{
-    private String[] mDatas;
+    private Context mContext;
+    private List<Gank> mGankList;
 
-    public MeituAdapter(String[] datas){
-        mDatas = datas;
+    public MeituAdapter(Context context, List<Gank> gankList){
+        mContext = context;
+        mGankList = gankList;
     }
 
     @Override
@@ -28,19 +35,19 @@ public class MeituAdapter extends RecyclerView.Adapter<MeituAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.mTextView.setText(mDatas[position]);
+        Glide.with(mContext).load(mGankList.get(position).getUrl()).into(holder.mImageView);
     }
 
     @Override
     public int getItemCount() {
-        return mDatas.length;
+        return mGankList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView mTextView;
+        public ImageView mImageView;
         public ViewHolder(View view){
             super(view);
-            mTextView = view.findViewById(R.id.tv_meitu);
+            mImageView = view.findViewById(R.id.iv_meitu);
         }
     }
 }
