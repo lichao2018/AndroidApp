@@ -1,6 +1,7 @@
 package com.lc.scan.ui.fragment;
 
 import android.app.Fragment;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 import com.lc.scan.R;
 import com.lc.scan.adapter.MeituAdapter;
@@ -29,6 +33,7 @@ public class MeituFragment extends Fragment {
     private List<Gank> mGankList;
     RecyclerView mRecyclerView;
     MeituAdapter mMeituAdapter;
+    private List<Drawable> mDrawableList;
 
     @Nullable
     @Override
@@ -47,8 +52,8 @@ public class MeituFragment extends Fragment {
     private void initView(View view){
         mRecyclerView = view.findViewById(R.id.recyclerview_meitu);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        mGankList = new ArrayList<>();
-        mMeituAdapter = new MeituAdapter(getActivity(), mGankList);
+        mDrawableList = new ArrayList<>();
+        mMeituAdapter = new MeituAdapter(getActivity(), mDrawableList);
         mRecyclerView.setAdapter(mMeituAdapter);
     }
 
@@ -58,11 +63,19 @@ public class MeituFragment extends Fragment {
             public void onResult(String result) {
                 Gson gson = new Gson();
                 BaseGankResponse baseGankResponse = gson.fromJson(result, BaseGankResponse.class);
-                mGankList.addAll(baseGankResponse.getResults());
+                final List<Gank> gankList = baseGankResponse.getResults();
                 mRecyclerView.post(new Runnable() {
                     @Override
                     public void run() {
-                        mMeituAdapter.notifyDataSetChanged();
+                for(Gank gank : gankList){
+                    Glide.with(getActivity()).load(gank.getUrl()).into(new SimpleTarget<Drawable>() {
+                        @Override
+                        public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
+                            mDrawableList.add(resource);
+                            mMeituAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
                     }
                 });
             }

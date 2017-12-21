@@ -1,15 +1,15 @@
 package com.lc.scan.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
-import com.bumptech.glide.Glide;
 import com.lc.scan.R;
-import com.lc.scan.bean.Gank;
 
 import java.util.List;
 
@@ -19,11 +19,11 @@ import java.util.List;
 
 public class MeituAdapter extends RecyclerView.Adapter<MeituAdapter.ViewHolder>{
     private Context mContext;
-    private List<Gank> mGankList;
+    private List<Drawable> mDrawableList;
 
-    public MeituAdapter(Context context, List<Gank> gankList){
+    public MeituAdapter(Context context, List<Drawable> drawableList){
         mContext = context;
-        mGankList = gankList;
+        mDrawableList = drawableList;
     }
 
     @Override
@@ -35,12 +35,16 @@ public class MeituAdapter extends RecyclerView.Adapter<MeituAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Glide.with(mContext).load(mGankList.get(position).getUrl()).into(holder.mImageView);
+        Drawable drawable = mDrawableList.get(position);
+        int h = drawable.getIntrinsicHeight()/3;
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, h);
+        holder.mImageView.setLayoutParams(layoutParams);
+        holder.mImageView.setImageDrawable(mDrawableList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mGankList.size();
+        return mDrawableList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
