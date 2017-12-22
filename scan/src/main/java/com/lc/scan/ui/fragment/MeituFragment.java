@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ public class MeituFragment extends Fragment {
     private List<Gank> mGankList;
     RecyclerView mRecyclerView;
     MeituAdapter mMeituAdapter;
+    private SwipeRefreshLayout mRefreshLayout;
 
     @Nullable
     @Override
@@ -53,6 +55,41 @@ public class MeituFragment extends Fragment {
         mGankList = new ArrayList<>();
         mMeituAdapter = new MeituAdapter(getActivity(), mGankList);
         mRecyclerView.setAdapter(mMeituAdapter);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                //这里实现上拉加载更多
+//                visibleItemCount = recyclerView.getChildCount();
+//                totalItemCount = mLinearLayoutManager.getItemCount();
+//                firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
+//                if(loading){
+//                    //Log.d("wnwn","firstVisibleItem: " +firstVisibleItem);
+//                    //Log.d("wnwn","totalPageCount:" +totalItemCount);
+//                    //Log.d("wnwn", "visibleItemCount:" + visibleItemCount)；
+//
+//                    if(totalItemCount > previousTotal){
+//                        //说明数据已经加载结束
+//                        loading = false;
+//                        previousTotal = totalItemCount;
+//                    }
+//                }
+//                //这里需要好好理解
+//                if (!loading && totalItemCount-visibleItemCount <= firstVisibleItem){
+//                    currentPage ++;
+//                    onLoadMore(currentPage);
+//                    loading = true;
+//                }
+            }
+        });
+        mRefreshLayout = view.findViewById(R.id.swipe_refresh_meitu);
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //这里实现下拉刷新
+            }
+        });
     }
 
     private void loadData(){
