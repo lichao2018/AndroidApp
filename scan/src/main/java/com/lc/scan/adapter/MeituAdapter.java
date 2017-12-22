@@ -1,17 +1,21 @@
 package com.lc.scan.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.lc.scan.R;
+import com.lc.scan.bean.Gank;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by lichao on 2017/12/19.
@@ -19,32 +23,34 @@ import java.util.List;
 
 public class MeituAdapter extends RecyclerView.Adapter<MeituAdapter.ViewHolder>{
     private Context mContext;
-    private List<Drawable> mDrawableList;
+    private List<Gank> mGankList;
+    private List<Map<Integer, Integer>> mHeight;
 
-    public MeituAdapter(Context context, List<Drawable> drawableList){
+    public MeituAdapter(Context context, List<Gank> gankList){
         mContext = context;
-        mDrawableList = drawableList;
+        mGankList = gankList;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        mHeight = new ArrayList<>();
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_meitu, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Drawable drawable = mDrawableList.get(position);
-        int h = drawable.getIntrinsicHeight()/3;
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, h);
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        final ViewGroup.LayoutParams layoutParams = holder.mImageView.getLayoutParams();
+        layoutParams.height = mGankList.get(position).getGirlHeight();
         holder.mImageView.setLayoutParams(layoutParams);
-        holder.mImageView.setImageDrawable(mDrawableList.get(position));
+        RequestOptions options = new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(android.R.color.white);
+        Glide.with(mContext).load(mGankList.get(position).getUrl()).apply(options).into(holder.mImageView);
     }
 
     @Override
     public int getItemCount() {
-        return mDrawableList.size();
+        return mGankList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
