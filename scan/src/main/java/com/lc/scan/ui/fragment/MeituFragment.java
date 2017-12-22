@@ -68,16 +68,16 @@ public class MeituFragment extends Fragment {
                         Drawable drawable = Glide.with(getActivity()).load(gank.getUrl()).into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get();
                         gank.setGirlWidth(drawable.getIntrinsicWidth()/3);
                         gank.setGirlHeight(drawable.getIntrinsicHeight()/3);
+                        mRecyclerView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mMeituAdapter.notifyDataSetChanged();
+                            }
+                        });
                     }
                 }catch (Exception e){
                     e.printStackTrace();
                 }
-                mRecyclerView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mMeituAdapter.notifyDataSetChanged();
-                    }
-                });
             }
 
             @Override
