@@ -34,6 +34,7 @@ public class MeituFragment extends Fragment {
     RecyclerView mRecyclerView;
     MeituAdapter mMeituAdapter;
     private SwipeRefreshLayout mRefreshLayout;
+    private int pageCount = 1;
 
     @Nullable
     @Override
@@ -88,17 +89,29 @@ public class MeituFragment extends Fragment {
             @Override
             public void onRefresh() {
                 //这里实现下拉刷新
+                loadData();
             }
         });
     }
 
     private void loadData(){
-        OkHttpApi.getStringFromServer("http://gank.io/api/data/%E7%A6%8F%E5%88%A9/20/0", new HttpCallback() {
+        OkHttpApi.getStringFromServer("http://gank.io/api/data/%E7%A6%8F%E5%88%A9/20/" + pageCount, new HttpCallback() {
             @Override
             public void onResult(String result) {
                 Gson gson = new Gson();
                 BaseGankResponse baseGankResponse = gson.fromJson(result, BaseGankResponse.class);
-                mGankList.addAll(baseGankResponse.getResults());
+                if(mGankList.size() != 0) {
+                    if (baseGankResponse.getResults().get(0).get_id().equals(mGankList.get(0).get_id())){
+                        mRefreshLayout.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mRefreshLayout.setRefreshing(false);
+                            }
+                        });
+                        return;
+                    }
+                }
+                mGankList.addAll(0, baseGankResponse.getResults());
 
                 try {
                     for (Gank gank : mGankList) {
@@ -115,6 +128,13 @@ public class MeituFragment extends Fragment {
                 }catch (Exception e){
                     e.printStackTrace();
                 }
+                mRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRefreshLayout.setRefreshing(false);
+                    }
+                });
+                pageCount++;
             }
 
             @Override
