@@ -59,7 +59,7 @@ public class ZhihuFragment extends Fragment {
     private void initView(View view){
         mStories = new ArrayList<>();
         mAdapter = new ZhihuAdapter(mContext, mStories);
-        tvEmpty = (TextView) view.findViewById(R.id.tv_empty);
+        tvEmpty = (TextView) view.findViewById(R.id.tv_empty_zhihu);
         tvEmpty.setText("正在加载数据...");
         mListView = (MyListView) view.findViewById(R.id.lv_test);
         mListView.setAdapter(mAdapter);

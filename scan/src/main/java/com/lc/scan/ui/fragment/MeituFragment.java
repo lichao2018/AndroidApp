@@ -1,6 +1,8 @@
 package com.lc.scan.ui.fragment;
 
 import android.app.Fragment;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +12,8 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
@@ -36,6 +40,7 @@ public class MeituFragment extends Fragment {
     private SwipeRefreshLayout mRefreshLayout;
     private int pageCount = 1;
     private boolean isLoading = false;
+    private TextView tvEmpty;
 
     @Nullable
     @Override
@@ -52,7 +57,10 @@ public class MeituFragment extends Fragment {
     }
 
     private void initView(View view){
+        tvEmpty = view.findViewById(R.id.tv_empty_meitu);
+        tvEmpty.setText("正在加载数据...");
         mRecyclerView = view.findViewById(R.id.recyclerview_meitu);
+        mRecyclerView.setVisibility(View.GONE);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mGankList = new ArrayList<>();
         mMeituAdapter = new MeituAdapter(getActivity(), mGankList);
@@ -80,9 +88,12 @@ public class MeituFragment extends Fragment {
     }
 
     private void loadData(){
+        mRefreshLayout.setRefreshing(true);
         OkHttpApi.getStringFromServer("http://gank.io/api/data/%E7%A6%8F%E5%88%A9/20/" + pageCount, new HttpCallback() {
             @Override
             public void onResult(String result) {
+                tvEmpty.setVisibility(View.GONE);
+                mRecyclerView.setVisibility(View.VISIBLE);
                 Gson gson = new Gson();
                 BaseGankResponse baseGankResponse = gson.fromJson(result, BaseGankResponse.class);
                 List<Gank> gankList = baseGankResponse.getResults();
@@ -91,6 +102,7 @@ public class MeituFragment extends Fragment {
                         Drawable drawable = Glide.with(getActivity()).load(gank.getUrl()).into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get();
                         gank.setGirlWidth(drawable.getIntrinsicWidth()/3);
                         gank.setGirlHeight(drawable.getIntrinsicHeight()/3);
+                        mGankList.add(gank);
                         mRecyclerView.post(new Runnable() {
                             @Override
                             public void run() {
@@ -99,29 +111,52 @@ public class MeituFragment extends Fragment {
                         });
                     }
                 }catch (Exception e){
-                    isLoading = false;
                     e.printStackTrace();
+                }finally {
+                    pageCount++;
+                    loadComplete();
                 }
-                if(mGankList.size() != 0) {
-                    mGankList.addAll(mGankList.size(), baseGankResponse.getResults());
-                }else{
-                    mGankList.addAll(baseGankResponse.getResults());
-                }
-
-                mRefreshLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mRefreshLayout.setRefreshing(false);
-                    }
-                });
-                pageCount++;
-                isLoading = false;
             }
 
             @Override
             public void onFailure(Exception e) {
-                isLoading = false;
+                loadComplete();
+                mRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getActivity(), "网络加载失败", Toast.LENGTH_SHORT).show();
+                        mRecyclerView.setVisibility(View.GONE);
+                        tvEmpty.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+                        tvEmpty.setTextColor(Color.BLUE);
+                        tvEmpty.setText("网络加载失败，点击重试");
+                        tvEmpty.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                tvEmpty.getPaint().setFlags(Paint.LINEAR_TEXT_FLAG);
+                                tvEmpty.setTextColor(Color.BLACK);
+                                tvEmpty.setText("正在加载数据...");
+                                mRefreshLayout.setRefreshing(true);
+                                tvEmpty.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        loadData();
+                                    }
+                                }, 1500);
+                            }
+                        });
+                    }
+                });
             }
         });
+    }
+
+    private void loadComplete(){
+        mRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mRefreshLayout.setRefreshing(false);
+            }
+        });
+        isLoading = false;
     }
 }
