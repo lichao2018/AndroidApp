@@ -35,6 +35,7 @@ public class MeituFragment extends Fragment {
     MeituAdapter mMeituAdapter;
     private SwipeRefreshLayout mRefreshLayout;
     private int pageCount = 1;
+    private boolean isLoading = false;
 
     @Nullable
     @Override
@@ -58,30 +59,12 @@ public class MeituFragment extends Fragment {
         mRecyclerView.setAdapter(mMeituAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                //这里实现上拉加载更多
-//                visibleItemCount = recyclerView.getChildCount();
-//                totalItemCount = mLinearLayoutManager.getItemCount();
-//                firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
-//                if(loading){
-//                    //Log.d("wnwn","firstVisibleItem: " +firstVisibleItem);
-//                    //Log.d("wnwn","totalPageCount:" +totalItemCount);
-//                    //Log.d("wnwn", "visibleItemCount:" + visibleItemCount)；
-//
-//                    if(totalItemCount > previousTotal){
-//                        //说明数据已经加载结束
-//                        loading = false;
-//                        previousTotal = totalItemCount;
-//                    }
-//                }
-//                //这里需要好好理解
-//                if (!loading && totalItemCount-visibleItemCount <= firstVisibleItem){
-//                    currentPage ++;
-//                    onLoadMore(currentPage);
-//                    loading = true;
-//                }
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(!recyclerView.canScrollVertically(1) && !isLoading){
+                    isLoading = true;
+                    loadData();
+                }
             }
         });
         mRefreshLayout = view.findViewById(R.id.swipe_refresh_meitu);
@@ -89,6 +72,8 @@ public class MeituFragment extends Fragment {
             @Override
             public void onRefresh() {
                 //这里实现下拉刷新
+                pageCount = 1;
+                mGankList.clear();
                 loadData();
             }
         });
@@ -100,21 +85,9 @@ public class MeituFragment extends Fragment {
             public void onResult(String result) {
                 Gson gson = new Gson();
                 BaseGankResponse baseGankResponse = gson.fromJson(result, BaseGankResponse.class);
-                if(mGankList.size() != 0) {
-                    if (baseGankResponse.getResults().get(0).get_id().equals(mGankList.get(0).get_id())){
-                        mRefreshLayout.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                mRefreshLayout.setRefreshing(false);
-                            }
-                        });
-                        return;
-                    }
-                }
-                mGankList.addAll(0, baseGankResponse.getResults());
-
+                List<Gank> gankList = baseGankResponse.getResults();
                 try {
-                    for (Gank gank : mGankList) {
+                    for (Gank gank : gankList) {
                         Drawable drawable = Glide.with(getActivity()).load(gank.getUrl()).into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get();
                         gank.setGirlWidth(drawable.getIntrinsicWidth()/3);
                         gank.setGirlHeight(drawable.getIntrinsicHeight()/3);
@@ -126,8 +99,15 @@ public class MeituFragment extends Fragment {
                         });
                     }
                 }catch (Exception e){
+                    isLoading = false;
                     e.printStackTrace();
                 }
+                if(mGankList.size() != 0) {
+                    mGankList.addAll(mGankList.size(), baseGankResponse.getResults());
+                }else{
+                    mGankList.addAll(baseGankResponse.getResults());
+                }
+
                 mRefreshLayout.post(new Runnable() {
                     @Override
                     public void run() {
@@ -135,11 +115,12 @@ public class MeituFragment extends Fragment {
                     }
                 });
                 pageCount++;
+                isLoading = false;
             }
 
             @Override
             public void onFailure(Exception e) {
-
+                isLoading = false;
             }
         });
     }
