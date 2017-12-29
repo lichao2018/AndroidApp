@@ -16,7 +16,10 @@
         </activity>
         <activity android:name="com.lc.scan.ui.activity.ZhihuStoryActivity"/>
         <activity android:name=".ui.activity.PictureActivity"/>
+
+        <service android:name="com.lc.scan.service.DownloadService"/>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 </manifest>

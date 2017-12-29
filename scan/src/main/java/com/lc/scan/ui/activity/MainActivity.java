@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lc.scan.R;
+import com.lc.scan.ui.fragment.DownloadFragment;
 import com.lc.scan.ui.fragment.MeituFragment;
 import com.lc.scan.ui.fragment.ZhihuFragment;
 
@@ -33,6 +34,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
     ZhihuFragment mZhihuFragment;
     MeituFragment mMeituFragment;
+    DownloadFragment mDownloadFragment;
     Fragment currentFragment;
 
     @Override
@@ -79,7 +81,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                         }
                         switchContainer(mMeituFragment);
                         break;
-                    case R.id.menu_item_onepiece:
+                    case R.id.menu_item_download:
+                        if(mDownloadFragment == null){
+                            mDownloadFragment = new DownloadFragment();
+                        }
+                        switchContainer(mDownloadFragment);
+                        break;
                     case R.id.menu_item_naruto:
                         break;
                     default:

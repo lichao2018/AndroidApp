@@ -14,9 +14,9 @@
 
     <group android:id="@+id/menu_group_cartoon">
         <item
-            android:id="@+id/menu_item_onepiece"
+            android:id="@+id/menu_item_download"
             android:icon="@mipmap/ic_local_florist_white_24dp"
-            android:title="海贼王"/>
+            android:title="下载"/>
 
         <item
             android:id="@+id/menu_item_naruto"
