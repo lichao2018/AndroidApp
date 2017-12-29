@@ -19,8 +19,8 @@
             android:title="下载"/>
 
         <item
-            android:id="@+id/menu_item_naruto"
+            android:id="@+id/menu_item_memo"
             android:icon="@mipmap/ic_movie_white_24dp"
-            android:title="火影忍者"/>
+            android:title="出行备忘"/>
     </group>
 </menu>

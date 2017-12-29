@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.lc.scan.R;
 import com.lc.scan.ui.fragment.DownloadFragment;
 import com.lc.scan.ui.fragment.MeituFragment;
+import com.lc.scan.ui.fragment.MemoFragment;
 import com.lc.scan.ui.fragment.ZhihuFragment;
 
 /**
@@ -32,10 +33,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     DrawerLayout mDrawerLayout;
     TextView tvHeader;
 
-    ZhihuFragment mZhihuFragment;
-    MeituFragment mMeituFragment;
-    DownloadFragment mDownloadFragment;
-    Fragment currentFragment;
+    Fragment mZhihuFragment, mMeituFragment, mDownloadFragment, mMemoFragment, currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +85,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                         }
                         switchContainer(mDownloadFragment);
                         break;
-                    case R.id.menu_item_naruto:
+                    case R.id.menu_item_memo:
+                        if(mMemoFragment == null){
+                            mMemoFragment = new MemoFragment();
+                        }
+                        switchContainer(mMemoFragment);
                         break;
                     default:
                         break;
