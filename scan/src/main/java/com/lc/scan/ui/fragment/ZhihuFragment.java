@@ -1,6 +1,5 @@
 package com.lc.scan.ui.fragment;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -32,7 +31,7 @@ import java.util.List;
  * Created by lichao on 2017/12/12.
  */
 
-public class ZhihuFragment extends Fragment {
+public class ZhihuFragment extends BaseFragment {
 
     private List<ZhihuStory> mStories;
     private ZhihuNews mZhihuNews;

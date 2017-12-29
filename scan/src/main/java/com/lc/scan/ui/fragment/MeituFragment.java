@@ -32,7 +32,7 @@ import java.util.List;
  * Created by lichao on 2017/12/14.
  */
 
-public class MeituFragment extends Fragment {
+public class MeituFragment extends BaseFragment {
 
     private List<Gank> mGankList;
     RecyclerView mRecyclerView;
@@ -88,12 +88,22 @@ public class MeituFragment extends Fragment {
     }
 
     private void loadData(){
-        mRefreshLayout.setRefreshing(true);
+        mRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mRefreshLayout.setRefreshing(true);
+            }
+        });
         OkHttpApi.getStringFromServer("http://gank.io/api/data/%E7%A6%8F%E5%88%A9/20/" + pageCount, new HttpCallback() {
             @Override
             public void onResult(String result) {
-                tvEmpty.setVisibility(View.GONE);
-                mRecyclerView.setVisibility(View.VISIBLE);
+                tvEmpty.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        tvEmpty.setVisibility(View.GONE);
+                        mRecyclerView.setVisibility(View.VISIBLE);
+                    }
+                });
                 Gson gson = new Gson();
                 BaseGankResponse baseGankResponse = gson.fromJson(result, BaseGankResponse.class);
                 List<Gank> gankList = baseGankResponse.getResults();

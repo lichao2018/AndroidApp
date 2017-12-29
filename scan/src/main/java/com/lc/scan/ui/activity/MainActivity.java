@@ -73,13 +73,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                         }
                         switchContainer(mZhihuFragment);
                         break;
-                    case R.id.menu_item_renmin:
-                    case R.id.menu_item_onepiece:
-                    case R.id.menu_item_naruto:
+                    case R.id.menu_item_meitu:
                         if(mMeituFragment == null){
                             mMeituFragment = new MeituFragment();
                         }
                         switchContainer(mMeituFragment);
+                        break;
+                    case R.id.menu_item_onepiece:
+                    case R.id.menu_item_naruto:
                         break;
                     default:
                         break;
