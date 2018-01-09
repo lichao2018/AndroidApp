@@ -26,6 +26,16 @@ public class ZhihuAdapter extends BaseAdapter{
         mDatas = datas;
     }
 
+    public void updateDatas(List<ZhihuStory> datas){
+        mDatas.addAll(0, datas);
+        notifyDataSetChanged();
+    }
+
+    public void addDatas(List<ZhihuStory> datas){
+        mDatas.addAll(datas);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return mDatas.size();
@@ -45,7 +55,7 @@ public class ZhihuAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHodler viewHodler;
         if(convertView == null){
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_item, parent, false);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_zhihu, parent, false);
             viewHodler = new ViewHodler();
             viewHodler.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
             convertView.setTag(viewHodler);
@@ -58,7 +68,5 @@ public class ZhihuAdapter extends BaseAdapter{
 
     private class ViewHodler{
         TextView tvTitle;
-        TextView tvBody;
-        TextView tvFoot;
     }
 }

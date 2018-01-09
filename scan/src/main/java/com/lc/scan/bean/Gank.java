@@ -5,6 +5,7 @@ package com.lc.scan.bean;
  */
 
 public class Gank {
+    private String _id;
     private String createdAt;
     private String desc;
     private String publishedAt;
@@ -15,6 +16,14 @@ public class Gank {
     private String who;
     private int girlHeight;
     private int girlWidth;
+
+    public String get_id(){
+        return _id;
+    }
+
+    public void set_id(String _id){
+        this._id = _id;
+    }
 
     public String getCreatedAt() {
         return createdAt;

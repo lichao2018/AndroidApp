@@ -7,20 +7,20 @@
             android:title="知乎日报"/>
 
         <item
-            android:id="@+id/menu_item_renmin"
+            android:id="@+id/menu_item_meitu"
             android:icon="@mipmap/ic_mood_white_24dp"
-            android:title="人民日报"/>
+            android:title="美图"/>
     </group>
 
     <group android:id="@+id/menu_group_cartoon">
         <item
-            android:id="@+id/menu_item_onepiece"
+            android:id="@+id/menu_item_download"
             android:icon="@mipmap/ic_local_florist_white_24dp"
-            android:title="海贼王"/>
+            android:title="下载"/>
 
         <item
-            android:id="@+id/menu_item_naruto"
+            android:id="@+id/menu_item_memo"
             android:icon="@mipmap/ic_movie_white_24dp"
-            android:title="火影忍者"/>
+            android:title="出行备忘"/>
     </group>
 </menu>

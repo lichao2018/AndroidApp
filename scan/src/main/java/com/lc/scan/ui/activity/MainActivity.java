@@ -8,13 +8,17 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lc.scan.R;
+import com.lc.scan.ui.fragment.DownloadFragment;
 import com.lc.scan.ui.fragment.MeituFragment;
+import com.lc.scan.ui.fragment.MemoFragment;
 import com.lc.scan.ui.fragment.ZhihuFragment;
 
 /**
@@ -29,9 +33,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     DrawerLayout mDrawerLayout;
     TextView tvHeader;
 
-    ZhihuFragment mZhihuFragment;
-    MeituFragment mMeituFragment;
-    Fragment currentFragment;
+    Fragment mZhihuFragment, mMeituFragment, mDownloadFragment, mMemoFragment, currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
         setSwipeBackEnable(false);
         initView();
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        return false;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return true;
     }
 
     public void initView(){
@@ -61,13 +73,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                         }
                         switchContainer(mZhihuFragment);
                         break;
-                    case R.id.menu_item_renmin:
-                    case R.id.menu_item_onepiece:
-                    case R.id.menu_item_naruto:
+                    case R.id.menu_item_meitu:
                         if(mMeituFragment == null){
                             mMeituFragment = new MeituFragment();
                         }
                         switchContainer(mMeituFragment);
+                        break;
+                    case R.id.menu_item_download:
+                        if(mDownloadFragment == null){
+                            mDownloadFragment = new DownloadFragment();
+                        }
+                        switchContainer(mDownloadFragment);
+                        break;
+                    case R.id.menu_item_memo:
+                        if(mMemoFragment == null){
+                            mMemoFragment = new MemoFragment();
+                        }
+                        switchContainer(mMemoFragment);
                         break;
                     default:
                         break;
