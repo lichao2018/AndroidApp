@@ -26,6 +26,16 @@ public class ZhihuAdapter extends BaseAdapter{
         mDatas = datas;
     }
 
+    public void updateDatas(List<ZhihuStory> datas){
+        mDatas.addAll(0, datas);
+        notifyDataSetChanged();
+    }
+
+    public void addDatas(List<ZhihuStory> datas){
+        mDatas.addAll(datas);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return mDatas.size();
