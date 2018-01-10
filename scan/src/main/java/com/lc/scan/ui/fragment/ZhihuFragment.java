@@ -1,5 +1,6 @@
 package com.lc.scan.ui.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,12 +16,11 @@ import com.lc.scan.BasePresenter;
 import com.lc.scan.BaseView;
 import com.lc.scan.R;
 import com.lc.scan.adapter.ZhihuAdapter;
-import com.lc.scan.bean.ZhihuNews;
 import com.lc.scan.bean.ZhihuStory;
 import com.lc.scan.presenter.ZhihuPresenter;
+import com.lc.scan.ui.activity.ZhihuStoryActivity;
 import com.lc.scan.ui.view.MyListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,8 +29,6 @@ import java.util.List;
 
 public class ZhihuFragment extends BaseFragment implements BaseView<List<ZhihuStory>>{
 
-    private List<ZhihuStory> mStories;
-    private ZhihuNews mZhihuNews;
     MyListView mListView;
     ZhihuAdapter mAdapter;
     TextView tvEmpty;
@@ -47,8 +46,7 @@ public class ZhihuFragment extends BaseFragment implements BaseView<List<ZhihuSt
     }
 
     private void initView(View view){
-        mStories = new ArrayList<>();
-        mAdapter = new ZhihuAdapter(mContext, mStories);
+        mAdapter = new ZhihuAdapter(mContext);
         tvEmpty = (TextView) view.findViewById(R.id.tv_empty_zhihu);
         tvEmpty.setText("正在加载数据...");
         mListView = (MyListView) view.findViewById(R.id.lv_test);
@@ -64,6 +62,14 @@ public class ZhihuFragment extends BaseFragment implements BaseView<List<ZhihuSt
             @Override
             public void onLoadMore() {
                 mPresenter.loadMore();
+            }
+        });
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(mContext, ZhihuStoryActivity.class);
+                intent.putExtra("id", ((ZhihuStory)mAdapter.getItem(position-1)).getId());
+                getActivity().startActivity(intent);
             }
         });
     }

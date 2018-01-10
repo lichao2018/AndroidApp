@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.lc.scan.R;
 import com.lc.scan.bean.ZhihuStory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,9 +22,9 @@ public class ZhihuAdapter extends BaseAdapter{
     private List<ZhihuStory> mDatas;
     private Context mContext;
 
-    public ZhihuAdapter(Context context, List<ZhihuStory> datas){
+    public ZhihuAdapter(Context context){
         mContext = context;
-        mDatas = datas;
+        mDatas = new ArrayList<>();
     }
 
     public void updateDatas(List<ZhihuStory> datas){

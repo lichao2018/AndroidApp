@@ -32,6 +32,9 @@ public class ZhihuPresenter implements BasePresenter{
                 mZhihuNews = gson.fromJson(result, ZhihuNews.class);
                 latestId = mZhihuNews.getStories().get(1).getId();
                 mView.showDatas(mZhihuNews.getStories().subList(1, mZhihuNews.getStories().size()-1));
+                if(mZhihuNews.getStories().size() < 15){
+                    loadMore();
+                }
             }
 
             @Override
