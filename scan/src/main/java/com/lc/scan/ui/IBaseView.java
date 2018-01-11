@@ -1,10 +1,10 @@
-package com.lc.scan;
+package com.lc.scan.ui;
 
 /**
  * Created by lichao on 2018/1/9.
  */
 
-public interface BaseView<T> {
+public interface IBaseView<T> {
     void showDatas(T datas);
 
     void showLoadErr();
@@ -14,4 +14,8 @@ public interface BaseView<T> {
     void showMoreErr();
 
     void refreshData(T datas);
+
+    void showLoading();
+
+    void hideLoading();
 }

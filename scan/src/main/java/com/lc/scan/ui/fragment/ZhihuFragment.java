@@ -12,8 +12,8 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lc.scan.BasePresenter;
-import com.lc.scan.BaseView;
+import com.lc.scan.presenter.IBasePresenter;
+import com.lc.scan.ui.IBaseView;
 import com.lc.scan.R;
 import com.lc.scan.adapter.ZhihuAdapter;
 import com.lc.scan.bean.ZhihuStory;
@@ -27,12 +27,12 @@ import java.util.List;
  * Created by lichao on 2017/12/12.
  */
 
-public class ZhihuFragment extends BaseFragment implements BaseView<List<ZhihuStory>>{
+public class ZhihuFragment extends BaseFragment implements IBaseView<List<ZhihuStory>> {
 
     MyListView mListView;
     ZhihuAdapter mAdapter;
     TextView tvEmpty;
-    BasePresenter mPresenter;
+    IBasePresenter mPresenter;
 
     @Nullable
     @Override
@@ -148,5 +148,15 @@ public class ZhihuFragment extends BaseFragment implements BaseView<List<ZhihuSt
                 });
             }
         });
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
     }
 }

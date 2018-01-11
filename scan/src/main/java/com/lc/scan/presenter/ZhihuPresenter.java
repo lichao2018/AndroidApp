@@ -1,8 +1,7 @@
 package com.lc.scan.presenter;
 
 import com.google.gson.Gson;
-import com.lc.scan.BasePresenter;
-import com.lc.scan.BaseView;
+import com.lc.scan.ui.IBaseView;
 import com.lc.scan.bean.ZhihuNews;
 import com.lc.scan.bean.ZhihuStory;
 import com.lc.scan.callback.HttpCallback;
@@ -14,12 +13,12 @@ import java.util.List;
  * Created by lichao on 2018/1/9.
  */
 
-public class ZhihuPresenter implements BasePresenter{
-    private BaseView mView;
+public class ZhihuPresenter implements IBasePresenter {
+    private IBaseView mView;
     private ZhihuNews mZhihuNews;
     private int latestId;
 
-    public ZhihuPresenter(BaseView view){
+    public ZhihuPresenter(IBaseView view){
         mView = view;
     }
 
