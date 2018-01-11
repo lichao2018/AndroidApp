@@ -40,7 +40,7 @@ public class MeituFragment extends BaseFragment implements IBaseView<List<Gank>>
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_meitu, container, false);
         initView(view);
-        mPresenter = new MeituPresenter(this);
+        mPresenter = new MeituPresenter(getActivity(), this);
         mPresenter.loadData();
         return view;
     }
@@ -52,6 +52,7 @@ public class MeituFragment extends BaseFragment implements IBaseView<List<Gank>>
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mMeituAdapter = new MeituAdapter(getActivity());
         mRecyclerView.setAdapter(mMeituAdapter);
+        //上拉加载更多
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
