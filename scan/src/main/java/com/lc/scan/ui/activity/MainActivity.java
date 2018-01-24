@@ -19,6 +19,7 @@ import com.lc.scan.R;
 import com.lc.scan.ui.fragment.DownloadFragment;
 import com.lc.scan.ui.fragment.MeituFragment;
 import com.lc.scan.ui.fragment.MemoFragment;
+import com.lc.scan.ui.fragment.WeixinFragment;
 import com.lc.scan.ui.fragment.ZhihuFragment;
 
 /**
@@ -33,7 +34,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     DrawerLayout mDrawerLayout;
     TextView tvHeader;
 
-    Fragment mZhihuFragment, mMeituFragment, mDownloadFragment, mMemoFragment, currentFragment;
+    Fragment mZhihuFragment, mMeituFragment, mDownloadFragment, mMemoFragment, mWeixinFragment, currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +91,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                             mMemoFragment = new MemoFragment();
                         }
                         switchContainer(mMemoFragment);
+                        break;
+                    case R.id.menu_item_weixin:
+                        if(mWeixinFragment == null){
+                            mWeixinFragment = new WeixinFragment();
+                        }
+                        switchContainer(mWeixinFragment);
                         break;
                     default:
                         break;
