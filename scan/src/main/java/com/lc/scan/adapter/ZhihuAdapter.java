@@ -10,30 +10,38 @@ import android.widget.TextView;
 import com.lc.scan.R;
 import com.lc.scan.bean.ZhihuStory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by lichao on 2017/11/15.
  */
 
-public class ZhihuAdapter extends BaseAdapter{
+public class ZhihuAdapter extends BaseAdapter implements IBaseAdapter<List<ZhihuStory>>{
 
     private List<ZhihuStory> mDatas;
     private Context mContext;
 
-    public ZhihuAdapter(Context context, List<ZhihuStory> datas){
+    public ZhihuAdapter(Context context){
         mContext = context;
-        mDatas = datas;
+        mDatas = new ArrayList<>();
     }
 
+    @Override
     public void updateDatas(List<ZhihuStory> datas){
         mDatas.addAll(0, datas);
         notifyDataSetChanged();
     }
 
+    @Override
     public void addDatas(List<ZhihuStory> datas){
         mDatas.addAll(datas);
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void clearDatas() {
+        mDatas.clear();
     }
 
     @Override

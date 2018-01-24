@@ -9,18 +9,17 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview_meitu"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:visibility="gone"/>
-
         <TextView
             android:id="@+id/tv_empty_meitu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview_meitu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"/>
     </LinearLayout>
 
 </android.support.v4.widget.SwipeRefreshLayout>
