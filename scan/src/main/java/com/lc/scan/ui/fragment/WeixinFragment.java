@@ -6,13 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
+import com.lc.scan.R;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXTextObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-
-import net.sourceforge.simcpux.R;
 
 /**
  * Created by lichao on 2018/1/24.
@@ -29,18 +29,18 @@ public class WeixinFragment extends BaseFragment implements View.OnClickListener
     }
 
     public void initView(View view){
-        view.findViewById(R.id.btn_send_text).setOnClickListener(this);
+        view.findViewById(R.id.btn_share_text).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.btn_send_text:
+            case R.id.btn_share_text:
                 WXTextObject textObject = new WXTextObject();
-                textObject.text = "12345";
+                textObject.text = "123456";
                 WXMediaMessage msg = new WXMediaMessage();
                 msg.mediaObject = textObject;
-                msg.description ="12345";
+                msg.description = "123456";
                 SendMessageToWX.Req req = new SendMessageToWX.Req();
                 req.transaction = "text" + System.currentTimeMillis();
                 req.message = msg;

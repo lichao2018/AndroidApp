@@ -1,9 +1,10 @@
-package com.lc.scan.ui.activity;
+package com.lc.scan.wxapi;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.res.XmlResourceParser;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -17,23 +18,25 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lc.scan.R;
+import com.lc.scan.ui.activity.BaseActivity;
 import com.lc.scan.ui.fragment.DownloadFragment;
 import com.lc.scan.ui.fragment.MeituFragment;
 import com.lc.scan.ui.fragment.MemoFragment;
+import com.lc.scan.ui.fragment.WeixinFragment;
 import com.lc.scan.ui.fragment.ZhihuFragment;
-import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
-import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
-import com.tencent.mm.opensdk.modelmsg.WXTextObject;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
-import net.sourceforge.simcpux.R;
+import com.tencent.mm.opensdk.modelbase.BaseReq;
+import com.tencent.mm.opensdk.modelbase.BaseResp;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 /**
  * Created by lichao on 2017/11/15.
  */
 
-public class MainActivity extends BaseActivity implements View.OnClickListener{
+public class WXEntryActivity extends BaseActivity implements View.OnClickListener, IWXAPIEventHandler{
 
     Context mContext;
     NavigationView mNavigationView;
@@ -41,7 +44,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     DrawerLayout mDrawerLayout;
     TextView tvHeader;
 
+    public static String WECHAT_APP_ID = "wxd930ea5d5a258f4f";
+
     Fragment mZhihuFragment, mMeituFragment, mDownloadFragment, mMemoFragment, mWeixinFragment, currentFragment;
+    IWXAPI mWxApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +55,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         setContentView(R.layout.activity_zhihu);
         mContext = this;
 
-        XmlResourceParser parser = mContext.getResources().getLayout(R.layout.activity_zhihu);
-        Log.e("", "parser.getName : " + parser.getName());
+        mWxApi = WXAPIFactory.createWXAPI(this, WECHAT_APP_ID);
+        mWxApi.handleIntent(getIntent(), this);
 
         setSwipeBackEnable(false);
         initView();
@@ -103,21 +109,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                         switchContainer(mMemoFragment);
                         break;
                     case R.id.menu_item_weixin:
-//                        if(mWeixinFragment == null){
-//                            mWeixinFragment = new WeixinFragment();
-//                        }
-//                        switchContainer(mWeixinFragment);
-                        WXTextObject textObject = new WXTextObject();
-                        textObject.text = "12345";
-                        WXMediaMessage msg = new WXMediaMessage();
-                        msg.mediaObject = textObject;
-                        msg.description ="12345";
-                        SendMessageToWX.Req req = new SendMessageToWX.Req();
-                        req.transaction = "text" + System.currentTimeMillis();
-                        req.message = msg;
-                        req.scene = SendMessageToWX.Req.WXSceneSession;
-                        IWXAPI iwxapi = WXAPIFactory.createWXAPI(mContext, "wxd930ea5d5a258f4f");
-                        iwxapi.sendReq(req);
+                        if(mWeixinFragment == null){
+                            mWeixinFragment = new WeixinFragment();
+                        }
+                        switchContainer(mWeixinFragment);
                         break;
                     default:
                         break;
@@ -154,5 +149,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Log.e("scan", "onNewIntent");
+    }
+
+    @Override
+    public void onReq(BaseReq req) {
+        Log.e("scan", req.toString());
+    }
+
+    @Override
+    public void onResp(BaseResp resp) {
+        Log.e("scan", resp.errStr);
     }
 }
