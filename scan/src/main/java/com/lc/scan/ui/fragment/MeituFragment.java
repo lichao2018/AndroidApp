@@ -13,12 +13,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lc.scan.R;
 import com.lc.scan.adapter.MeituAdapter;
 import com.lc.scan.bean.Gank;
 import com.lc.scan.presenter.IBasePresenter;
 import com.lc.scan.presenter.MeituPresenter;
 import com.lc.scan.ui.IBaseView;
+
+import net.sourceforge.simcpux.R;
 
 import java.util.List;
 

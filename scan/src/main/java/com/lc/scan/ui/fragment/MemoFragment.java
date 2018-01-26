@@ -9,8 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.lc.scan.R;
 import com.lc.scan.adapter.MemoAdapter;
+
+import net.sourceforge.simcpux.R;
 
 /**
  * Created by lichao on 2017/12/29.

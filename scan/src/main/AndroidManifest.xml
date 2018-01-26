@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.lc.scan">
+          package="net.sourceforge.simcpux">
 
     <application
         android:allowBackup="true"
@@ -15,7 +15,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.lc.scan.ui.activity.ZhihuStoryActivity"/>
-        <activity android:name=".ui.activity.PictureActivity"/>
+        <activity android:name="com.lc.scan.ui.activity.PictureActivity"/>
 
         <service android:name="com.lc.scan.service.DownloadService"/>
     </application>

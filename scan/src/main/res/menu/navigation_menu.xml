@@ -22,5 +22,10 @@
             android:id="@+id/menu_item_memo"
             android:icon="@mipmap/ic_movie_white_24dp"
             android:title="出行备忘"/>
+
+        <item
+            android:id="@+id/menu_item_weixin"
+            android:icon="@mipmap/ic_action_share"
+            android:title="微信开发"/>
     </group>
 </menu>
