@@ -7,7 +7,8 @@ import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.lc.scan.R;
+
+import net.sourceforge.simcpux.R;
 
 /**
  * Created by lichao on 2017/12/29.

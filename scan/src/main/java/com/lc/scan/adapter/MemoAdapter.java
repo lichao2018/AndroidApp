@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.lc.scan.R;
+import net.sourceforge.simcpux.R;
 
 import java.util.ArrayList;
 import java.util.List;

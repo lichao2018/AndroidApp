@@ -26,6 +26,7 @@
         <item
             android:id="@+id/menu_item_weixin"
             android:icon="@mipmap/ic_action_share"
+
             android:title="微信分享"/>
     </group>
 </menu>

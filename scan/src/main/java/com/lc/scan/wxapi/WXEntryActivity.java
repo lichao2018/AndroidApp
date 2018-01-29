@@ -3,6 +3,7 @@ package com.lc.scan.wxapi;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,6 +25,7 @@ import com.lc.scan.ui.fragment.MeituFragment;
 import com.lc.scan.ui.fragment.MemoFragment;
 import com.lc.scan.ui.fragment.WeixinFragment;
 import com.lc.scan.ui.fragment.ZhihuFragment;
+
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
