@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.lc.scan.R;
+import com.lc.scan.wxapi.WXEntryActivity;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXImageObject;
@@ -20,13 +21,17 @@ import java.io.ByteArrayOutputStream;
  */
 
 public class MyWeixinUtil {
+    public static void openWeixin(IWXAPI iwxapi){
+        iwxapi.openWXApp();
+    }
+
     public static void shareText(IWXAPI iwxapi, String text){
         WXTextObject textObj = new WXTextObject();
         textObj.text = text;
 
         WXMediaMessage msg = new WXMediaMessage();
         msg.mediaObject = textObj;
-        msg.description = text;
+        msg.description = "msg from lc app";
 
         SendMessageToWX.Req req = new SendMessageToWX.Req();
         req.transaction = buildTransaction("text");
@@ -82,11 +87,19 @@ public class MyWeixinUtil {
 
     }
 
+    public static void registerAppToWX(IWXAPI iwxapi){
+        iwxapi.registerApp(WXEntryActivity.WECHAT_APP_ID);
+    }
+
+    public static void unregisterAppToWX(IWXAPI iwxapi){
+        iwxapi.unregisterApp();
+    }
+
     private static String buildTransaction(final String type) {
         return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
     }
 
-    public static byte[] bmpToByteArray(final Bitmap bmp, final boolean needRecycle) {
+    private static byte[] bmpToByteArray(final Bitmap bmp, final boolean needRecycle) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.PNG, 100, output);
         if (needRecycle) {

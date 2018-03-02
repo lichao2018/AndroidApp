@@ -5,11 +5,10 @@ import android.support.annotation.Nullable;
 import android.webkit.WebView;
 
 import com.google.gson.Gson;
+import com.lc.scan.R;
 import com.lc.scan.bean.ZhihuStoryContent;
 import com.lc.scan.callback.HttpCallback;
 import com.lc.scan.net.OkHttpApi;
-
-import net.sourceforge.simcpux.R;
 
 /**
  * Created by lichao on 2017/11/20.

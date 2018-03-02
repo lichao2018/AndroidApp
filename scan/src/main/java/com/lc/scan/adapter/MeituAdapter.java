@@ -11,11 +11,9 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.lc.scan.R;
 import com.lc.scan.bean.Gank;
 import com.lc.scan.ui.activity.PictureActivity;
-
-import net.sourceforge.simcpux.R;
-
 import java.util.ArrayList;
 import java.util.List;
 

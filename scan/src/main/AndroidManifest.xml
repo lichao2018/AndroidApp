@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="net.sourceforge.simcpux">
+          package="com.lc.scan">
 
     <application
         android:allowBackup="true"

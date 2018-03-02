@@ -5,8 +5,50 @@
               android:layout_height="match_parent">
 
     <Button
+        android:id="@+id/btn_start_weixin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="start weixin"/>
+
+    <Button
         android:id="@+id/btn_share_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="share text"/>
+
+    <Button
+        android:id="@+id/btn_share_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="share img"/>
+
+    <Button
+        android:id="@+id/btn_share_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="share url"/>
+
+    <Button
+        android:id="@+id/btn_get_weixin_token"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="get weixin token"/>
+
+    <Button
+        android:id="@+id/btn_scan_code_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="scan code login"/>
+
+    <Button
+        android:id="@+id/btn_register_app_to_weixin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="register app to weixin"/>
+
+    <Button
+        android:id="@+id/btn_unregister_app"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="unregister app"/>
 </LinearLayout>

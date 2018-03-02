@@ -11,7 +11,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import net.sourceforge.simcpux.R;
+import com.lc.scan.R;
 
 /**
  * Created by lichao on 2017/11/28.
