@@ -14,7 +14,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.lc.scan.R;
 import com.lc.scan.bean.Gank;
 import com.lc.scan.ui.activity.PictureActivity;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -44,7 +44,7 @@ public class WXEntryActivity extends BaseActivity implements View.OnClickListene
     DrawerLayout mDrawerLayout;
     TextView tvHeader;
 
-    public static String WECHAT_APP_ID = "wxd930ea5d5a258f4f";
+    public static String WECHAT_APP_ID = "wx63539bd57e341a30";
 
     Fragment mZhihuFragment, mMeituFragment, mDownloadFragment, mMemoFragment, mWeixinFragment, currentFragment;
     IWXAPI mWxApi;
