@@ -3,6 +3,8 @@ package com.lc.scan.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
+import android.util.Xml;
 
 import com.lc.scan.R;
 import com.lc.scan.wxapi.WXEntryActivity;
@@ -12,13 +14,17 @@ import com.tencent.mm.opensdk.modelmsg.WXImageObject;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXTextObject;
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
+
+import org.xmlpull.v1.XmlPullParser;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -39,6 +45,7 @@ public class MyWeixinUtil {
     private final static String IP = "192.168.1.1";
     private final static String TRADE_TYPE = "APP";
     private final static String KEY = "1111111111";//还没拿到
+    private static String mRandom = "";
 
     public static void openWeixin(IWXAPI iwxapi){
         iwxapi.openWXApp();
@@ -111,11 +118,22 @@ public class MyWeixinUtil {
     }
 
     public static String getPrepayId(String notify_url, String out_trade_no, String total_fee){
-        String random = getRandom();
-        String stringA = "appid="+APP_ID+"&body="+BODY+"&mch_id="+MCH_ID+"&nonce_str="+random
+        mRandom = getRandom();
+        Map<String, String> map = new HashMap<>();
+        map.put("appid", APP_ID);
+        map.put("body", BODY);
+        map.put("mch_id", MCH_ID);
+        map.put("nonce_str", mRandom);
+        map.put("notify_url", notify_url);
+        map.put("out_trade_no", out_trade_no);
+        map.put("spill_create_ip", IP);
+        map.put("total_fee", total_fee);
+        map.put("trade_type", TRADE_TYPE);
+        String stringA = "appid="+APP_ID+"&body="+BODY+"&mch_id="+MCH_ID+"&nonce_str="+mRandom
                 +"&notify_url="+notify_url+"&out_trade_no="+out_trade_no+"&spbill_create_ip="+IP
                 +"&total_fee="+total_fee+"&trade_type="+TRADE_TYPE;
         String sign = MD5Encode(stringA + "&key=" + KEY, "UTF-8").toUpperCase();
+        map.put("sign", sign);
 
         try {
             URL url = new URL(ORDER_URL);
@@ -129,8 +147,7 @@ public class MyWeixinUtil {
             conn.setRequestProperty("content-type", "application/x-www-form-urlencoded");
 
             DataOutputStream out = new DataOutputStream(conn.getOutputStream());
-            //TODO 请求格式什么样？
-            String content = stringA + "&sign="+sign;
+            String content = createXmlParam(map);
             out.writeBytes(content);
             out.flush();
             out.close();
@@ -154,13 +171,12 @@ public class MyWeixinUtil {
             conn.disconnect();
 
             //TODO 解析返回的xml字符串，返回的是xml吧？
-            String return_code = map.get("return_code");
+            Map<String, String> returnMap = decodeXml(buffer.toString());
+            String return_code = returnMap.get("return_code");
             String prepay_id = null;
             if (return_code.contains("SUCCESS")) {
-                prepay_id = map.get("prepay_id");//获取到prepay_id
+                prepay_id = returnMap.get("prepay_id");//获取到prepay_id
             }
-
-            //TODO 只返回prepay_id吗？网上第三方的都返回什么
             return prepay_id;
         } catch (ConnectException ce) {
             System.out.println("连接超时：{}" + ce);
@@ -168,6 +184,54 @@ public class MyWeixinUtil {
             System.out.println("https请求异常：{}" + e);
         }
         return "";
+    }
+
+    public static boolean pay(IWXAPI iwxapi, String outTradeNo, String totalFee){
+        PayReq request = new PayReq();
+        request.appId = APP_ID;
+        request.partnerId = MCH_ID;
+        request.prepayId = getPrepayId(APP_ID, outTradeNo, totalFee);
+        request.packageValue = "Sign=WXPay";
+        request.nonceStr = mRandom;
+        request.timeStamp = String.valueOf(System.currentTimeMillis());
+        String stringA = "appId=" + request.appId + "&nonceStr=" + request.nonceStr + "&packageValue=" + request.packageValue +
+                "&partnerId=" + request.partnerId + "&prepayId=" + request.prepayId + "&timeStamp=" + request.timeStamp;
+        request.sign = MD5Encode(stringA + "&key=" + KEY, "UTF-8").toUpperCase();
+        return iwxapi.sendReq(request);
+    }
+
+    public static Map<String, String> decodeXml(String content) {
+
+        try {
+            Map<String, String> xml = new HashMap<String, String>();
+            XmlPullParser parser = Xml.newPullParser();
+            parser.setInput(new StringReader(content));
+            int event = parser.getEventType();
+            while (event != XmlPullParser.END_DOCUMENT) {
+
+                String nodeName = parser.getName();
+                switch (event) {
+                    case XmlPullParser.START_DOCUMENT:
+
+                        break;
+                    case XmlPullParser.START_TAG:
+
+                        if ("xml".equals(nodeName) == false) {
+                            // 实例化student对象
+                            xml.put(nodeName, parser.nextText());
+                        }
+                        break;
+                    case XmlPullParser.END_TAG:
+                        break;
+                }
+                event = parser.next();
+            }
+
+            return xml;
+        } catch (Exception e) {
+            Log.e("orion-e--->", e.toString());
+        }
+        return null;
     }
 
     public static String createXmlParam(Map<String, String> map){
