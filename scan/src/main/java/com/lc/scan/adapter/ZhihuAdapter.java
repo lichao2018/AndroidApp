@@ -7,9 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.lc.scan.R;
 import com.lc.scan.bean.ZhihuStory;
-
-import net.sourceforge.simcpux.R;
 
 import java.util.ArrayList;
 import java.util.List;

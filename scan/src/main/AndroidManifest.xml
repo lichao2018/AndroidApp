@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="net.sourceforge.simcpux">
+          package="com.lc.scan">
 
     <application
         android:allowBackup="true"
@@ -18,6 +18,13 @@
         <activity android:name="com.lc.scan.ui.activity.PictureActivity"/>
 
         <service android:name="com.lc.scan.service.DownloadService"/>
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5aa34d6f8f4a9d2ead000642"></meta-data>
+        <meta-data
+            android:name="UMENG_MESSAGE_SECRET"
+            android:value="56f3156f7a1b242cd8f981cb5e7700e5" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET"/>

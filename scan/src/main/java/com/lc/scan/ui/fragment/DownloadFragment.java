@@ -12,9 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.lc.scan.R;
 import com.lc.scan.service.DownloadService;
-
-import net.sourceforge.simcpux.R;
 
 /**
  * Created by lichao on 2017/12/29.

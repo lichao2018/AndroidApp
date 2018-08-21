@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lc.scan.R;
 import com.lc.scan.adapter.ZhihuAdapter;
 import com.lc.scan.bean.ZhihuStory;
 import com.lc.scan.presenter.IBasePresenter;
@@ -19,8 +20,6 @@ import com.lc.scan.presenter.ZhihuPresenter;
 import com.lc.scan.ui.IBaseView;
 import com.lc.scan.ui.activity.ZhihuStoryActivity;
 import com.lc.scan.ui.view.MyListView;
-
-import net.sourceforge.simcpux.R;
 
 import java.util.List;
 
