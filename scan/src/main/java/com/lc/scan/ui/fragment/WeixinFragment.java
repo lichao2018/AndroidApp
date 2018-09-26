@@ -38,6 +38,7 @@ public class WeixinFragment extends BaseFragment implements View.OnClickListener
         view.findViewById(R.id.btn_get_weixin_token).setOnClickListener(this);
         view.findViewById(R.id.btn_register_app_to_weixin).setOnClickListener(this);
         view.findViewById(R.id.btn_unregister_app).setOnClickListener(this);
+        view.findViewById(R.id.btn_pay).setOnClickListener(this);
     }
 
     @Override
@@ -63,6 +64,14 @@ public class WeixinFragment extends BaseFragment implements View.OnClickListener
                 break;
             case R.id.btn_unregister_app:
                 MyWeixinUtil.unregisterAppToWX(mIWXAPI);
+                break;
+            case R.id.btn_pay:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        MyWeixinUtil.pay(mIWXAPI, System.currentTimeMillis() + "", "10");
+                    }
+                }).start();
                 break;
             default:
                 break;

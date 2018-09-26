@@ -8,5 +8,11 @@
         android:id="@+id/recyclerview_memo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"/>
+        android:orientation="vertical"
+        android:visibility="gone"/>
+
+    <com.lc.ctpv.CountTimeProgressView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="100dp"/>
 </LinearLayout>

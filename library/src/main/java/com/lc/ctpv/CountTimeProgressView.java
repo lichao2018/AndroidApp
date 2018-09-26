@@ -3,6 +3,7 @@ package com.lc.ctpv;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -81,11 +82,16 @@ public class CountTimeProgressView extends View{
     private static String DEFAULT_TITLE_CENTER_TEXT = "jump";
     private static int DEFAULT_TITLE_CENTER_COLOR = Color.parseColor("#FFFFFF");
     private static float DEFAULT_TITLE_CENTER_SIZE = 16f;
+    Paint mPaint;
+    Path mPath;
 
-    public CountTimeProgressView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public CountTimeProgressView(Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
         mContext = context;
-        TypedArray attr = context.obtainStyledAttributes(attrs, R.styleable.CountTimeProgressView, defStyleAttr, 0);
+
+        mPaint = new Paint();
+
+        TypedArray attr = context.obtainStyledAttributes(attrs, R.styleable.CountTimeProgressView, 0, 0);
         if(attr != null){
             titleCenterTextSize = attr.getDimension(R.styleable.CountTimeProgressView_titleCenterSize, spToPx(DEFAULT_TITLE_CENTER_SIZE));
             titleCenterTextColor = attr.getColor(R.styleable.CountTimeProgressView_titleCenterColor, DEFAULT_TITLE_CENTER_COLOR);
@@ -120,6 +126,58 @@ public class CountTimeProgressView extends View{
             mTextStyle = DEFAULT_TEXTSTYLE;
             countTime = DEFAULT_COUNT_TIME;
         }
+
+        radius = 90;
+        centerPaintX = 100;
+        centerPaintY = 100;
+        startAngle = -90;
+        mPath = new Path();
+        mPath.addCircle(0f, 0f, radius, Path.Direction.CW);
+        mPathMeasure.setPath(mPath, false);
+        mLength = mPathMeasure.getLength();
+        initAnimation();
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        canvas.translate(centerPaintX, centerPaintY);
+        canvas.rotate(startAngle);
+
+        mPaint.setColor(Color.BLUE);
+        mPaint.setStrokeWidth(3);
+        mPaint.setStyle(Paint.Style.STROKE);
+        canvas.drawCircle(0, 0, radius, mPaint);
+
+        mPathMeasure.getPosTan(mCurrentValue * mLength, mSportPos, mSportTan);
+
+        mPaint.setColor(Color.RED);
+        mPaint.setStyle(Paint.Style.FILL);
+        canvas.drawCircle(mSportPos[0], mSportPos[1], 20, mPaint);
+    }
+
+    protected void initAnimation(){
+        ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
+        animator.setDuration(5000);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mCurrentValue = (float) animation.getAnimatedValue();
+                invalidate();
+            }
+        });
+        animator.start();
     }
 
     private float spToPx(float sp){

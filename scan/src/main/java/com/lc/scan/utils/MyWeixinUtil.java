@@ -39,12 +39,12 @@ import java.util.Random;
 
 public class MyWeixinUtil {
     private final static String ORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
-    private final static String APP_ID = "wx0b51c9523bffa013";
-    private final static String MCH_ID = "1467414802";
+    private final static String OPEN_APP_ID = "wx226b9a2a30512cb5";
+    private final static String MCH_ID = "1496746302";
     private final static String BODY = "test";
     private final static String IP = "192.168.1.1";
     private final static String TRADE_TYPE = "APP";
-    private final static String KEY = "1111111111";//还没拿到
+    private final static String KEY = "oksl9013jsck4h9akbksju7834hjkzjs";
     private static String mRandom = "";
 
     public static void openWeixin(IWXAPI iwxapi){
@@ -120,16 +120,16 @@ public class MyWeixinUtil {
     public static String getPrepayId(String notify_url, String out_trade_no, String total_fee){
         mRandom = getRandom();
         Map<String, String> map = new HashMap<>();
-        map.put("appid", APP_ID);
+        map.put("appid", OPEN_APP_ID);
         map.put("body", BODY);
         map.put("mch_id", MCH_ID);
         map.put("nonce_str", mRandom);
         map.put("notify_url", notify_url);
         map.put("out_trade_no", out_trade_no);
-        map.put("spill_create_ip", IP);
+        map.put("spbill_create_ip", IP);
         map.put("total_fee", total_fee);
         map.put("trade_type", TRADE_TYPE);
-        String stringA = "appid="+APP_ID+"&body="+BODY+"&mch_id="+MCH_ID+"&nonce_str="+mRandom
+        String stringA = "appid="+OPEN_APP_ID+"&body="+BODY+"&mch_id="+MCH_ID+"&nonce_str="+mRandom
                 +"&notify_url="+notify_url+"&out_trade_no="+out_trade_no+"&spbill_create_ip="+IP
                 +"&total_fee="+total_fee+"&trade_type="+TRADE_TYPE;
         String sign = MD5Encode(stringA + "&key=" + KEY, "UTF-8").toUpperCase();
@@ -170,7 +170,6 @@ public class MyWeixinUtil {
             out = null;
             conn.disconnect();
 
-            //TODO 解析返回的xml字符串，返回的是xml吧？
             Map<String, String> returnMap = decodeXml(buffer.toString());
             String return_code = returnMap.get("return_code");
             String prepay_id = null;
@@ -188,9 +187,9 @@ public class MyWeixinUtil {
 
     public static boolean pay(IWXAPI iwxapi, String outTradeNo, String totalFee){
         PayReq request = new PayReq();
-        request.appId = APP_ID;
+        request.appId = OPEN_APP_ID;
         request.partnerId = MCH_ID;
-        request.prepayId = getPrepayId(APP_ID, outTradeNo, totalFee);
+        request.prepayId = getPrepayId(OPEN_APP_ID, outTradeNo, totalFee);
         request.packageValue = "Sign=WXPay";
         request.nonceStr = mRandom;
         request.timeStamp = String.valueOf(System.currentTimeMillis());
